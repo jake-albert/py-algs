@@ -1,9 +1,8 @@
-# Stack class implemented using a List object
-
 class Stack:
-
-    # optional loading of items onto stack during initialization
+    ''' Stack class implemented using a List object. '''
+    
     def __init__(self, loads=None):
+        ''' Constructor with option to load multiple values. '''
         self.items = []
         if loads is not None:
             for load in loads:
