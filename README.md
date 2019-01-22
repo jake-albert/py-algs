@@ -16,4 +16,4 @@ Usage:
       `>>> c16p13.f1(28)`  
       `6`  
       `>>> c16p13.test()`  
-      `>>>`                  # as this test function uses **assert** statements, no values are output or returned.
+      `>>>              `  # (this test function uses **assert** statements so no values are output or returned when correct.)
