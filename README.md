@@ -28,5 +28,5 @@ Usage:
          >>> c16p13.f1(28)  
          6  
          >>> c16p13.test()  
-         >>>                # (this test function uses assert statements so no output when correct.)
+         >>>                # this test function uses assert statements so no output when correct.
       
