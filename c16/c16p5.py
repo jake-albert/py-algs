@@ -1,4 +1,5 @@
 # c16p5
+
 # Factorial Zeros: Write an algorithm which computes the number of trailing 
 # zeros in n factorial. 
 
@@ -43,21 +44,24 @@ def f1(n):
     divisor = 5
     count = 0
     
-    # number of factors contributing at least one 5
+    # Perform integer division on n by first 5, then 25, and so on 
+    # until we have reached a divisor larger than n. At each step, the 
+    # result of this division is added to the total count.
+    
     count_for_divisor = n // divisor 
     
     while count_for_divisor > 0:
+        
         count += count_for_divisor
-    
-        # number of factors that contribute at least one more 5
         divisor *= 5
         count_for_divisor = n // divisor
     
     return count
     
-# Some sample problems    
 def test():
-
+    """Tests some sample inputs.
+    """
+    
     pairs = [(5,1),
              (12,2),
              (67,15)]
