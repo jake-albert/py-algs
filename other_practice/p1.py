@@ -1,6 +1,13 @@
-# Return the length of the longest consecutive sequence of integers that could be
-# formed from an unsorted list. For example, if the input is [1,5,2,6,3,45,11,-10],
-# the correct output is 3 (1,2,3). If the input is [55,77,-1,12], the output is 1.
+# p1
+
+# A problem shared with me by my friend Andrew.
+#
+# Return the length of the longest consecutive sequence of integers that could
+# be formed by picking values from an unsorted list. For example, if the input
+# is [1,5,3,6,45,2,11,-10], the correct output is 3 (1,2,3). If the input is 
+# [55,77,-1,12], the output is 1 (any sequence of length 1 is the longest).
+
+##############################################################################
 
 # The below solution requires O(N) space as it stores one key, value pair in a 
 # dictionary for each item in the input. It takes O(N) time, performing constant-
@@ -15,7 +22,7 @@
 # call this the "low-high property".
 
 # Each new integer that is read is either:
-#     1. A duplicate value. This has no affect.
+#     1. A duplicate value. This has no effect.
 #     2. The beginning of a new, isolated span of length 1. 
 #     3. The extension of an already existing span in one direction. (ex. [7,8],9)
 #     4. The "bridge" between two already existing spans. (ex. [1,2,3],4,[5,6,7,8])

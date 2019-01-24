@@ -27,7 +27,7 @@
 # For example, if the guess is BBYG and the solution RRRB, then there are two
 # ways to count pseudo-hits. One would be to say that each of the B's in the 
 # guess is a correct color, just in the wrong slot, meaning that the number of
-# pseudo-hits is 2. Alternatively, there is a reading that once a slots in the 
+# pseudo-hits is 2. Alternatively, there is a rule that once a slots in the 
 # solution of a certain color have been "exhausted" by your guesses, further 
 # guesses in the same color do not count as a pseudo-hits. So in the example, 
 # there would be only one pseudo-hit.
@@ -39,9 +39,6 @@
 # This approach takes strings as input and works in only one pass of each.
 # Because there are only four slots, the algorithm works in O(1) time with 
 # O(1) space requirements.
-
-# guess BBYG
-# solut RRRB
 
 # I assume that the input is correct (that it has 4 characters each which can
 # be only from the set {"R","Y","G","B"}). Could also write a generalized 
@@ -89,10 +86,18 @@ def f1(guess,solut):
     p_hits = sum([min(x[0],x[1]) for x in mismatch_counter.values()])    
     return hits, p_hits
     
+# Testing on randomly-generated input below.
+    
 from random import randint
 
 def test(n):
-
+    """Produces output for n randomly generated guess-solution pairs. 
+    Correctness may be cheked by hand.
+    
+    Args:
+        n: An int number of times to call the function.
+    """
+    
     for _ in range(n):
         
         guess, solut = random_sequence(), random_sequence()
@@ -103,8 +108,6 @@ def test(n):
 mapping = {0: "R", 1: "Y", 2: "G", 3: "B"} 
         
 def random_sequence():
-
-    builder = []
-    for _ in range(4):
-        builder.append(mapping[randint(0,3)])
-    return "".join(builder)
+    """Generates one random 4-char sequence of colors."""
+    
+    return "".join([mapping[randint(0,3)] for _ in range(4)])
