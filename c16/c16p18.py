@@ -9,7 +9,7 @@
 # O(m+n**2/m) but there is likely a much tighter bound that we can make given how 
 # quickly the algorithm will time out in many cases. There still might be bugs in it.
 
-# it is late and your brain is mush. just do it over you fucker.
+# it is late and your brain is mush. just do it over
 
 def f1(pattern,value):
     

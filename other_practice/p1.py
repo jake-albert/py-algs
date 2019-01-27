@@ -9,9 +9,9 @@
 
 ##############################################################################
 
-# The below solution requires O(N) space as it stores one key, value pair in a 
-# dictionary for each item in the input. It takes O(N) time, performing constant-
-# time operations for each item in the input.
+# The below solution requires O(N) space as it stores one "key: value" pair in
+# a dictionary for each item in the input. It takes O(N) time, performing 
+# constant-time operations for each item in the input.
 
 # The algorithm works by dynamically growing "spans" of consecutive integers as 
 # it reads each item in the list. A "span" has a low value and high value and 
@@ -24,8 +24,10 @@
 # Each new integer that is read is either:
 #     1. A duplicate value. This has no effect.
 #     2. The beginning of a new, isolated span of length 1. 
-#     3. The extension of an already existing span in one direction. (ex. [7,8],9)
-#     4. The "bridge" between two already existing spans. (ex. [1,2,3],4,[5,6,7,8])
+#     3. The extension of an already existing span in one direction. 
+#        (ex. [7,8],9)
+#     4. The "bridge" between two already existing spans. 
+#        (ex. [1,2,3],4,[5,6,7,8])
 
 # We can determine which case a new integer x belongs to by checking first whether 
 # x is in the dictionary or not. If it is, then we have already seen this integer 
