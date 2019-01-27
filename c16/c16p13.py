@@ -116,7 +116,6 @@ def f1(sq1,sq2):
     Raises:
         ValueError: A square with side length <= 0 has been input.
     """
-    
     c1, s1 = sq1
     c2, s2 = sq2
     
@@ -147,8 +146,7 @@ def f1(sq1,sq2):
         print(Line(1,slope,y_int))
     
 def test(): 
-    """Tests some examples."""
-    
+    """Tests some examples."""  
     inputs = [(((0,0),6),((2,3),17)),
               (((-5,0),6),((-5,88),17)),
               (((0,0),6),((9,0),17)),

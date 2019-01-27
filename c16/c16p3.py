@@ -120,8 +120,7 @@ def get_equation(ls):
         
     Raises:
         Exception: the input is a point.
-    """
-    
+    """   
     x1,y1 = ls[0]
     x2,y2 = ls[1]
    
@@ -200,8 +199,7 @@ def get_common_val(a1,a2,b1,b2):
         
     Returns:
         A number.
-    """
-    
+    """  
     a_start, a_stop = min(a1,a2), max(a1,a2)
     b_start, b_stop = min(b1,b2), max(b1,b2)
     
@@ -220,8 +218,7 @@ def get_common_val(a1,a2,b1,b2):
     
 def test():
     """Tests some sample inputs. Far from exhaustive.
-    """
-    
+    """   
     assert f1([(1.0,1.0),(2.0,2.0)],[(-1.0,-1.0),(1.0,1.0)]) == (1.0,1.0)
     assert f1([(1.0,1.0),(0.0,0.0)],[(0.0,6.0),(6.0,0.0)]) == None
     assert f1([(0.0,0.0),(1.0,1.0)],[(1.0,0.0),(0.0,1.0)]) == (0.5,0.5)

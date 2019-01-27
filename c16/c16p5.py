@@ -37,7 +37,6 @@ def f1(n):
     Raises:
         ValueError: n is negative.
     """
-    
     if n < 0:
         raise ValueError("Input must be non-negative.")
     
@@ -61,7 +60,6 @@ def f1(n):
 def test():
     """Tests some sample inputs.
     """
-    
     pairs = [(5,1),
              (12,2),
              (67,15)]

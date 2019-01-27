@@ -43,7 +43,6 @@ def f1(ppl):
     Returns:
         An int when input is nonempty, otherwise None.
     """
-    
     if len(ppl) == 0: return
     
     alive_by_year = {}    
@@ -79,7 +78,6 @@ def alive(person,year):
     Returns:
         A Boolean.
     """
-    
     return year >= person[0] and (person[1] is None or year <= person[1]) 
     
 # Another approach takes advantage of the fact that how people's birth and
@@ -108,8 +106,7 @@ def f2(ppl):
         
     Returns:
         An int when input is nonempty, otherwise None.
-    """
-    
+    """  
     if len(ppl) == 0: return None
 
     # Ignore any deaths after 2000 as those years can have only decreases
@@ -157,9 +154,7 @@ ans1978a = [(1901,1901),(1978,1978),(1978,1978)]
 # birth year that appears earliest in the input. 
     
 def test():
-    """Tests some sample inputs.
-    """
-    
+    """Tests some sample inputs."""
     inputs = [ans1961a,ans1945a,ans1940a,ans1950a,ans1901a,ans1950b,ans1978a]
     
     for input in inputs:

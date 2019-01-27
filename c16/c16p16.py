@@ -1,3 +1,6 @@
+import operator as op
+from random import shuffle
+
 # c16p16
 
 # Sub Sort: Given an array of integers, write a method to find indices m and n
@@ -40,8 +43,6 @@
 # value to the left. We can use information from calculating the left index 
 # to save a bit of time in doing this. 
 
-import operator as op
-
 def f1(lst):
     """Returns the indices to the shortest subarray that, if sorted, 
     would result in the entire input list being sorted.
@@ -53,7 +54,6 @@ def f1(lst):
         A tuple of integer indices, or the None object when input is 
         either empty or already sorted.
     """
-    
     if len(lst) == 0:
         #print("List empty.")
         return
@@ -131,8 +131,7 @@ def generate_extremes_list(lst,mins):
         
     Returns:
         A list of integers.
-    """
-    
+    """ 
     output = [0 for x in range(len(lst))]
 
     # Track minima from right to left using "less than" operator, and 
@@ -173,7 +172,6 @@ def f2(lst):
         A tuple of integer indices, or the None object when input is 
         either empty or already sorted.
     """
-
     if len(lst) == 0:
         #print("List empty.")
         return
@@ -198,7 +196,6 @@ def get_left_index_2(lst):
         An integer index, or the None object if no index with the 
         desired property exists.
     """
-    
     minimum = float("inf")
     left = len(lst) - 1
     
@@ -224,8 +221,7 @@ def get_right_index_2(lst,start):
         
     Returns:
         An integer index.
-    """
-    
+    """  
     maximum = float("-inf")
     right = start
     
@@ -242,8 +238,6 @@ def get_right_index_2(lst,start):
  
 # Some tests on randomized inputs. Confirm only that f1 and f2 are equivalent, 
 # not necessarily that they are correct. 
- 
-from random import shuffle
     
 def test(n,leng):
     """Tests randomized inputs for equivalency between f1 and f2.
@@ -256,8 +250,7 @@ def test(n,leng):
     Args:
         n: Int number of trials per length of input list.
         leng: Int upper limit for list generation.
-    """
-        
+    """      
     for length in range(maxlength):
         input = list(range(length))
         input.extend(list(range(length//2)))

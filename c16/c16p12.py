@@ -86,7 +86,6 @@ def f1(elem):
     Args:
         elem: A well-formed Element instance.
     """
-    
     builder = []
     print_elem(elem,builder)
     print(" ".join(builder))
@@ -98,8 +97,7 @@ def print_elem(elem,builder):
     Args:
         elem: A well-formed Element instance.
         builder: A list.
-    """
-    
+    """  
     builder.append(str(elem.tag))
     for attr in elem.attributes:
         builder.append(str(attr.tag))
@@ -114,8 +112,7 @@ def print_elem(elem,builder):
     
 def test():
     """Tests the (non-exhaustive) example from the problem description.
-    """
-    
+    """  
     input1 = Element("family",                                   \
                      [Attribute("last_name","McDowell"),         \
                       Attribute("state","CA")],                  \

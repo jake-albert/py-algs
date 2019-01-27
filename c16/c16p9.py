@@ -18,8 +18,7 @@ def sub(a,b):
     Args:
         a: An int.
         b: An int.
-    """
-    
+    """ 
     min_val, max_val = min(a,b), max(a,b)
     res = 0
 
@@ -40,8 +39,7 @@ def mul(a,b):
     Args:
         a: An int.
         b: An int.
-    """
-    
+    """  
     res = 0
     
     # To ensure we take as few steps as possible, find the value with 
@@ -93,7 +91,6 @@ def div(a,b):
     Raises:
         ZeroDivisionError: b is zero.
     """
-    
     if b == 0:
         raise ZeroDivisionError
     

@@ -1,3 +1,7 @@
+import sys
+sys.path.append('..')
+from data_structs import Stack
+
 # c16p8
 
 # English lnt: Given any integer, print an English phrase that describes the
@@ -21,11 +25,6 @@ decades = ["","","Twenty","Thirty","Forty","Fifty","Sixty","Seventy",\
            "Eighty","Ninety"]
 groups  = ["","Thousand","Million","Billion","Trillion","Quadrillion",\
            "Quintillion","Sextillion","Septillion","Octillion"]
- 
-import sys
-sys.path.append('..')
-
-from data_structs import Stack
     
 def f1(n):
     """Prints an English phrase that describes an input integer.
@@ -35,8 +34,7 @@ def f1(n):
         
     Raises:
         ValueError: int has absolute value greater than 10^30.
-    """
-    
+    """   
     if n == 0:
         print("Zero")
         return
@@ -119,7 +117,6 @@ def three_digit_string(hundreds,tens,ones):
     Raises:
         IndexError: A number greater than 9 has been input.
     """
-    
     output_list = []
     
     # When hundreds digit is zero, go immediately to tens digit.

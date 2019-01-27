@@ -1,3 +1,5 @@
+from c16p13 import Line
+
 # c16p14
 
 # Best Line: Given a two-dimensional graph with points on it, find a line 
@@ -24,8 +26,6 @@
 # only ONE value for hashing. Furthermore, equivalent lines as defined by the 
 # class are hashed to the same value. The discussion about how I keep this 
 # consistent is in c16p13.py, where the Line class is defined.
-
-from c16p13 import Line
 
 def f1(points):
     """Prints and returns a Line object representing the line that
@@ -80,7 +80,6 @@ def get_line(p1,p2):
     Returns:
         A Line object.
     """
-    
     x1, y1 = p1
     x2, y2 = p2
     

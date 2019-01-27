@@ -1,3 +1,5 @@
+from random import randint
+
 # c16p15
 
 # Master Mind: The Game of Master Mind is played as follows:
@@ -58,7 +60,6 @@ def f1(guess,solut):
     Returns:
         A tuple of ints (hits, pseudo_hits). 
     """
-    
     hits = 0   
 
     # Dictionary maps a character to a running count of times that the
@@ -88,16 +89,13 @@ def f1(guess,solut):
     
 # Testing on randomly-generated input below.
     
-from random import randint
-
 def test(n):
     """Produces output for n randomly generated guess-solution pairs. 
     Correctness may be cheked by hand.
     
     Args:
         n: An int number of times to call the function.
-    """
-    
+    """ 
     for _ in range(n):
         
         guess, solut = random_sequence(), random_sequence()
@@ -109,5 +107,4 @@ mapping = {0: "R", 1: "Y", 2: "G", 3: "B"}
         
 def random_sequence():
     """Generates one random 4-char sequence of colors."""
-    
     return "".join([mapping[randint(0,3)] for _ in range(4)])

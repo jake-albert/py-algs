@@ -28,7 +28,6 @@ def f1(k,shorter,longer):
     Returns:
         A list of all possible lengths as integers.
     """
-
     if k == 0: return [0]
     
     # Each time one longer plank replaces one shorter plank, the total 
@@ -58,8 +57,7 @@ def f2(k,shorter,longer):
         
     Raises:
         ValueError: At least one of k, shorter, and longer is incorrect. 
-    """
-    
+    """  
     if shorter <= 0 or longer <=0:
         raise ValueError("shorter and longer must be positive")
     if shorter >= longer:

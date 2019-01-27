@@ -1,103 +1,83 @@
-# start
+from random import randint
 
-# ahhh, the one that started it all. This time you got it much much more quickly. 
-# You know that whatever the span is, it has a left-index and a right-index. 
+# c16p17
 
-# for example in the array [-8,3,-2,4,-10] the best sum is 5, from index 1 with value 3, 
-# to index 3 with value 4. The index 3 also has the special property that it has the 
-# max sum out of all of the spans that start at 0 and go until somewhere. And same for 
-# reverse. So we calculate those using O(1) space in O(n) time.
+# Contiguous Sequence: You are given an array of integers (both positive and 
+# negative). Find the contiguous sequence with the largest sum. Return the
+# sum.
+#
+# EXAMPLE
+# Input: 2, -8, 3, -2, 4, -l0
+# Output: 5 ( i.e. , { 3, -2, 4}) 
 
-# ONE CAVEAT is required before starting, and this becomes clear when you attempt to 
-# run the algorithm on an input with all or nearly all negative values:
-# for instance, [-8,1,-2,-4,-10]. The max sum is of course 1 here, but just going by 
-# the above we never reach a running total greater than -8. What we need to do at 
-# the start is "clip" away all negative numbers on the edge, since after all those 
-# cannot be part of a sum, unless ALL negative numbers are in it in which case we 
-# return the largest number.
+##############################################################################
+
+# An important definition to clarify is the maximum sum in a case where no 
+# positive integers exist in the list. I choose not to permit subsequences of 
+# length 0 when the input is non-empty and to interpret the maximum sum then
+# to be the maximum value in the all non-positive list.
+
+# While both solutions below use dynamic programming concepts to run in O(N) 
+# time using O(1) space, the second is far cleaner than the first and should
+# be expected to run faster because it on average does less work per integer.
+
+# The first approach treats the input list as a sequence of "globs", or 
+# maximally long continguous sequences, of negative and non-neg integers. For
+# example, the example array can be though of as an empty negative glob,
+# followed by a non-neg glob with 2, then a negative glob with -8, and so on.
+# An array like [-5,-6,1,-10,-8,3,-5,-9,2] begins with a negative glob of -5 
+# and -6. Otherwise, the maximum sum must be the result of summming over a 
+# sub-list that takes the form:
+
+# NON-NEGATIVE_GLOB (NEGATIVE_GLOB NON-NEGATIVE_GLOB)*
 
 def f1(lst):
-
-    # the sum is undefined for an empty list
+    """Returns the maximum sum of any contiguous sequence of a list.
+    
+    Args:
+        lst: A list of integers.
+        
+    Returns:
+        An integer, or None if input list is empty.
+    """
     if len(lst) == 0:
         return
         
-    # first, clip away negative values on the end
-    left = 0
-    max = float("-inf")
+    # Begin by peeling away the leading non-positive integers while
+    # storing the non-positive integer with the highest value. If the 
+    # entire list is traversed in this step, return that value.
     
-    # clip the left value
-    while left < len(lst):
-        if lst[left] > 0:
-            break
-        if lst[left] > max:
-            max = lst[left]
-        left += 1               
-        
-    # check if we have all non-positive values
-    if left == len(lst):
-        return max
-        
-    # running total and maximum running total
-    total, best_total = 0, float("-inf")
-    
-    # traverse list from left to right
-    for i in range(left,len(lst)):
-    
-        # increment the running total and see if it is max
-        total += lst[i]
-        if total > best_total:
-            best_total = total
-            best_i = i
-    
-    # at this point, we have found best_i to be the right-index of the span
-    total, best_total = 0, float("-inf")
-    
-    # traverse list from right to left
-    for i in range(best_i,-1,-1):
-        
-        total += lst[i]
-        if total > best_total:
-            best_total = total
-    
-    return best_total
-    
-# UNFORTUNATELY, THIS IS ALL STILL WRONG. CONSIDER AN EXAMPLE LIKE [-5,-6,1,-10,-8,3,-5,-9,2]
-# the maximum sum is 3, but the algorithm won't find it. 
-
-# okay, i think i have a better way to think of it now. VIEW THE ARRAY NOW AS A SERIES 
-# of GLOBS of negative values followed by positive values then negative values. We will
-# want to have a result in the form POSITIVE GLOB (NEGATIVE GLOB POSITIVE GLOB)*
-
-def f2(lst):
-
-    if len(lst) == 0:
-        return
-        
-    # peel away the leading non-positive values     
     least_neg = float("-inf")
     left = 0
     
     while lst[left] <=0:
     
-        # keep track of the least negative value 
         if lst[left] > least_neg:
             least_neg = lst[left]
         left += 1
         
-        # if we have scanned the whole list, return least negative value
         if left >= len(lst):
             return least_neg
             
-    # peel away trailing non-positive values
+    # After this step, peel away trailing non-positive integers. If we 
+    # have not yet returned by this point, then we know we will encounter
+    # at least one positive value.
+    
     right = len(lst) - 1
-    
     while lst[right] <= 0:
-    
         right -= 1
     
-    # we now have two indices, left and right, that mark the locations of the 
-    # left-most and right-most positive values in the array. 
+    # We now have two indices, left and right, that mark the locations
+    # of the left-most and right-most positive values in the array. The 
+    # first non-negative glob beginning at left is the first candidate 
+    # for a maximum sum. The global maximum sum must result from summing 
+    # over globs and must END with some non-negative glob.
+    
+    # For every non-negative glob that is not the first, the maximum sum 
+    # that ENDS with it is either the sum from that glob alone, or the 
+    # sum of that glob, the preceeding negative glob, and the maximum 
+    # sum that ends at the previous glob. One of these maximum sums is 
+    # the global maximum. 
     
     i, curmax = get_glob(left,lst)
     bestmax = curmax
@@ -110,29 +90,72 @@ def f2(lst):
     
     return bestmax
     
-# helper function that sums the next "glob" of non-negative or negative values
 def get_glob(i,lst):
+    """Sums the glob of either non-negative or negative values 
+    beginning at index i of the input list. 
     
-    # determine the appropriate comparator for the glob
-    if lst[i] >= 0:
-        cmp = lambda x: x >=0
-    else:
-        cmp = lambda x: x < 0
+    Args:
+        i: An integer index.
+        lst: A list of integers.
+        
+    Returns:
+        The first index to the right of the glob, and the sum of 
+        that glob.
+    """
     
+    # Determine from the first value whether we are in a non-neg or neg 
+    # glob. Continue to sum as long as within the same glob.
+    
+    cmp = (lambda x: x >=0) if lst[i] >= 0 else (lambda x: x < 0)  
     sum = 0
     
-    # continually advance i and add the lst value there to sum
-    # so long as the comparator still holds (that is, so long 
-    # as we are still within the same glob we identified at the start)
     while i < len(lst) and cmp(lst[i]):
         sum += lst[i]
         i += 1
     
     return i, sum
     
-# brute force solution for testing
-def f3(lst):
+# The second approach uses similar inductive logic as above but at the ELEMENT
+# level as opposed to the GLOB level. The contigous sequence with maximum sum
+# is also the best contiguous sequence of all the sequences that end at some 
+# index x. As a base case, the sum of the best contiguous sequence that ends 
+# at index 0 is simply the value at index 0. For all other indices x, it is 
+# either value at x alone, or the sum of x and the sum for the best contiguous
+# sequence ending at x-1 (whichever is greater). We calculate each of these 
+# sums, and return the maximum.  
+    
+def f2(lst):
+    """Returns the maximum sum of any contiguous sequence of a list.
+    
+    Args:
+        lst: A list of integers.
+        
+    Returns:
+        An integer, or None if input list is empty.
+    """
+    if len(lst) == 0:
+        return
 
+    best,prev = lst[0],lst[0]
+    for i in range(1,len(lst)):
+        prev = max(lst[i],prev+lst[i])
+        best = max(prev,best)
+    
+    return best
+    
+# For correctness testing, I wrote a brute-force algorithm that sums each of 
+# the O(N^2) contiguous subsequences of a list, altogether running in O(N^3) 
+# time. This function takes no shortcuts.
+
+def f3(lst):
+    """Returns the maximum sum of any contiguous sequence of a list.
+    
+    Args:
+        lst: A list of integers.
+        
+    Returns:
+        An integer, or None if input list is empty.
+    """
     if len(lst) == 0:
         return
  
@@ -148,54 +171,32 @@ def f3(lst):
             maxsum = max(maxsum,sumrange(i,j))
             
     return maxsum
-
-# highly efficient version
-def f4(lst):
-
-    if len(lst) == 0:
-        return
-
-    best,prev = lst[0],lst[0]
-    for i in range(1,len(lst)):
-        prev = max(lst[i],prev+lst[i])
-        best = max(prev,best)
+  
+def test(trials,n=200):
+    """Tests f1 and f2 against the correct f3 on randomized inputs.
     
-    return best
+    For each trial, generates an input list of n random integers from
+    -10 to 10 and checks that f1 and f2 return correct values. Prints 
+    progress updates and any discrepancies it finds.
     
-# test against the brute-force solution
-    
-import random
-    
-def test(n):
-
+    Args:
+        n: An integer number of trials.
+    """
     messups = 0
 
-    for i in range(n):
+    for i in range(trials):
         
         if i%10 == 0:
             print("on {}th trial".format(i))
     
-        lst = [random.randint(-10,10) for _ in range(200)]
+        lst = [randint(-10,10) for _ in range(n)]      
+        correct_val = f3(lst)
         
-        if f2(lst) != f3(lst):
-            print("f2",lst)
+        if f1(lst) != correct_val:
+            print("f1 result incorrect:",lst)
             messups += 1
-        if f4(lst) != f3(lst):
-            print("f4",lst)
+        if f2(lst) != correct_val:
+            print("f2 result incorrect:",lst)
             messups +=1
             
     print(f"{messups} messups.")
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-            

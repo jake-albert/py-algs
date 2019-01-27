@@ -20,8 +20,7 @@ def f1(a,b):
     Args:
         a: The first number.
         b: The second number.
-    """
-    
+    """   
     print(a,b) # Before swapping
     
     a -= b   # "a" now refers to a-b

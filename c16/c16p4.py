@@ -1,3 +1,6 @@
+import enum
+from itertools import chain
+
 # c16p4
 
 # Tic Tac Win: Design an algorithm to figure out if someone has won a game of
@@ -13,8 +16,6 @@
 # tic-tac-toe board with methods for checking individual rows and columns, 
 # but for this problem I chose to handle the input simply as a list of list 
 # of one-character strings.
-
-import enum
 
 class Square(enum.Enum):
 
@@ -43,8 +44,7 @@ def f1(board):
     
     Args:
         board: an n-length list of n-length lists of "X","O",or "_".
-    """     
-        
+    """          
     n = len(board) # 3 in standard board
     
     # Check each row and column one by one, and then both diagonals,
@@ -64,8 +64,7 @@ def is_blank(sym):
     
     Args:
         sym: A string.
-    """
-        
+    """      
     return sym == "_"
 
 def check_row(board,i,n):
@@ -75,10 +74,8 @@ def check_row(board,i,n):
         board: A list of lists of "X", "O", or "_".
         i: An int representing the row to check.
         n: An int representing the dimension of the board.
-    """
-    
-    sym = board[i][0]
-    
+    """   
+    sym = board[i][0]   
     if is_blank(sym): return False
     
     for j in range(1,n):
@@ -95,9 +92,7 @@ def check_column(board,j,n):
         j: An int representing the column to check.
         n: An int representing the dimension of the board.
     """
-
-    sym = board[0][j]
-    
+    sym = board[0][j]  
     if is_blank(sym): return False
     
     for i in range(1,n):
@@ -186,18 +181,14 @@ class Zone:
 # that identifies a win in O(1) time after each turn is completed in a real
 # game as it progresses.
        
-from itertools import chain
-       
 def f2(board):
     """Returns True if a board for tic-tac-toe has been won, and False
     otherwise.
     
     Args:
         board: an n-length list of n-length lists of "X","O",or "_".
-    """
-    
-    n = len(board)
-    
+    """    
+    n = len(board)   
     rows = [Zone(n) for i in range(n)]
     cols = [Zone(n) for i in range(n)]
     dags = [Zone(n), Zone(n)]
@@ -223,8 +214,7 @@ def get_zones(i,j,n,rows,cols,dags):
         rows: A list of all Zone instances for rows.
         cols: A list of all Zone instances for columns.
         dags: A list of all Zone instances for diagonals.
-    """
-    
+    """    
     output = [rows[i]]
     output.append(cols[j])
     if i==j:
@@ -234,9 +224,7 @@ def get_zones(i,j,n,rows,cols,dags):
     return output
     
 def test():
-    """Tests some inputs.
-    """
-    
+    """Tests some inputs. If all correct, returns None."""   
     win1 = [["X","O","_"],
             ["X","O","_"],
             ["X","_","_"]]

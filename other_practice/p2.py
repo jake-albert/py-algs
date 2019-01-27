@@ -36,7 +36,7 @@
 # grid being considered is always the same size. No more than 10 recursive
 # calls must be kept on the call stack at any one time, so memory requirements 
 # do not grow with the (potentially large) number of possible grids that can 
-# be created. There are 9^9, or 387,420,489 unique arrangements of digits on 
+# be created. There are 9^9, or 387,420,489, unique arrangements of digits on 
 # a grid, but this approach places only digits that can still legally be put
 # on the grid as it goes along, pruning off the vast majority of the options.
 # (On my machine it counts all valid grid arrangements in 0.91 seconds.)
@@ -103,37 +103,37 @@ class Grid:
         # constrains to a set of digits, then those digits are returned 
         # immediately. Otherwise, the sets' intersection is returned.
         
-        rds, cds = self.row_digits(i), self.column_digits(i)
+        rds, cds = self._row_digits(i), self._column_digits(i)
         
         if rds is None and cds is None:  
             return range(1,10)
         elif rds is None:  
-            return self.valid_digits(cds) 
+            return self._valid_digits(cds) 
         elif cds is None:  
-            return self.valid_digits(rds) 
+            return self._valid_digits(rds) 
         else:  
-            rvds, cvds = self.valid_digits(rds), self.valid_digits(cds)
+            rvds, cvds = self._valid_digits(rds), self._valid_digits(cds)
             return rvds.intersection(cvds)
      
-    def row_digits(self,i):
+    def _row_digits(self,i):
         """Returns the digits in the same row as the ith square, or 
         None if no such digits exist. Assumes that the ith square is 
         blank.
         """
         i0 = i//3*3  # ex. "3" for 3,4,5. 
         digs = [self.sqs[j] for j in range(i0,i0+3) if not self.is_blank(j)]
-        return self.format_digs(digs)
+        return self._format_digs(digs)
     
-    def column_digits(self,i):
+    def _column_digits(self,i):
         """Returns the digits in the same column as the ith square, or 
         None if no such digits exist. Assumes that the ith square is 
         blank.
         """
         i0 = i%3  # ex. "2" for 2,5,8.
         digs = [self.sqs[j] for j in range(i0,i0+7,3) if not self.is_blank(j)]
-        return self.format_digs(digs)
+        return self._format_digs(digs)
         
-    def format_digs(self,digs):
+    def _format_digs(self,digs):
         """Ensures that the digits are returned as a list in increasing 
         order, or the None object if there are no digits. When called by 
         functions like row_digits and column_digits, the input digs list 
@@ -146,17 +146,17 @@ class Grid:
         else:
             return [min(digs[0],digs[1]), max(digs[0],digs[1])]       
     
-    def valid_digits(self,ds):
+    def _valid_digits(self,ds):
         """Given a list of either one or two digits from the same group
         (a row or column), returns a set of valid digits that can join 
         this group.
         """
         if len(ds) == 1:
-            return self.valid_digits_one(ds[0])
+            return self._valid_digits_one(ds[0])
         else:
-            return self.valid_digits_two(ds)
+            return self._valid_digits_two(ds)
             
-    def valid_digits_one(self,d):
+    def _valid_digits_one(self,d):
         """Given a single digit, returns the set of valid digits that 
         could be added to a group with that digit.
         
@@ -167,7 +167,7 @@ class Grid:
         # Digits can form a 0-straight, 1-straight, 2-straight, or 
         # 3-straight of values (order not mattering). This means that 
         # if a group contains a single number d, any digit that is 
-        # within plus-or-minus 0,1,2,3,4, and 6 may join that group.
+        # within plus-or-minus 0,1,2,3,4, or 6 may join that group.
         # (So long as it is within range of 1-9 inclusive.)
         
         # The special case of group [2,4,8] is already handled here, as
@@ -180,7 +180,7 @@ class Grid:
         
         return {d+diff for diff in diffs if 0<d+diff<10}
         
-    def valid_digits_two(self,ds):
+    def _valid_digits_two(self,ds):
         """Given a list of two digit, returns the set of valid digits
         that could be added to complete a group with those digits.
         
@@ -207,7 +207,7 @@ class Grid:
                 output.add(candidate2)
                 
         # Another possibility to complete a group would be to be an 
-        # "internal addition" ([2,8] with 5 in the middle). This case 
+        # "internal" addition ([2,8] with 5 in the middle). This case 
         # occurs only when the two digits' average is an integer.
                 
         sum = (ds[0]+ds[1])

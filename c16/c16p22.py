@@ -1,178 +1,312 @@
-# start
+from itertools import chain
+from operator import lt, gt
 
-# so given that this problem takes only K as the input, it seems that the initial 
-# configuration of the board is supposed to be the same every time. If the board
-# is alternating checkerboard white and black squares, which is one plausible reading 
-# the of the problem description in the book, then regardless of the square it starts on,
-# its movement is repetitive and not too exciting. It just kind of travels diagonally,
-# flipping all of the squares it touches and never doubling back.
+# c16p22
 
-#  _______________________                        _______________________
-# │█ █ █ █ █ █ █ █ █ █ █ █│                      │█ █ █ █ █ █ █ █ █ █ █ █│
-# │ █ █ █ █ █ █ █ █ █ █ █ │                      │ █ █ █ █ █ █ █ █ █ █ █ │
-# │█ █ █ █ █ █ █ █ █ █ █ █│                      │█ █ █ █ █ █ █ █ █ █ █ █│
-# │ █ █ █ █ █ █ █ █ █ █ █ │        ==>           │ █ █ █ █ ███ █ █ █ █ █ │
-# │█ █ █ █ █ █ █ █ █ █ █ █│                      │█ █ █ █ █  ██ █ █ █ █ █│
-# │ █ █ █ █ █ █ █ █ █ █ █ │                      │ █ █ █ █ █  ██ █ █ █ █ │
-# │█ █ █ █ █ █ █ █ █ █ █ █│                      │█ █ █ █ █ █  ██ █ █ █ █│
-# │ █ █ █ █ █ █ █ █ █ █ █ │                      │ █ █ █ █ █ █  ██ █ █ █ │
-# │█ █ █ █ █ █ █ █ █ █ █ █│                      │█ █ █ █ █ █ █  ██ █ █ █│
-#  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯                        ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+# Langton's Ant: An ant is sitting on an infinite grid of white and black 
+# squares. It initially faces right. At each step, it does the following:
+#
+# (1) At a white square, flip the color of the square, turn 90 degrees right 
+# (clockwise), and move forward one unit.
+# (2) At a black square, flip the color of the square, turn 90 degrees left 
+# (counter-clockwise), and move forward one unit.
+#
+# Write a program to simulate the first K moves that the ant makes and print
+# the final board as a grid. Note that you are not provided with the data 
+# structure to represent the grid. This is something you must design yourself.
+# The only input to your method is K. You should print the final grid and 
+# return nothing. The method signature might be something like void 
+# printKMoves (int K). 
 
-# so I am assuming that the intension of the problem is to simulate the ant when 
-# all of the squares are WHITE at the start, as this seems to be the main conception
-# of the problem and makes for far more interesting behavior.
+##############################################################################
 
-# Since my instructions are to PRINT the grid at the end of the ant's movements, 
-# we have a few choices. We can keep a SET of squares that are black and then 
-# ADD to this set when a white square becomes black, and REMOVE if it becomes white
-# we can also check for set membership in O(1) time to determine if a square is 
-# white or black. This means we can update the grid in O(K) time, where k is the 
-# number of steps the ant makes.  
+# The problem describes the ant as sitting on a "grid of white and black 
+# squares", but does not specify an initial color pattern for the grid. Since
+# the function I write takes only K as input, I need to determine a reading
+# of the problem description so that the initial state of the grid can be the 
+# same every time I call the function.
 
-# as for drawing the board, we might want to have a little "buffer" space of white
-# untouched spaces so that the pattern is easier to see for a given time. we can as 
-# we update spaces, keep track of the north, south, east, and west most that a black 
-# space exists and then create an m by n matrix of characters to join together and 
-# print. Let's say that we want to create a border of at least one white layer around
-# the outermost region with a black square. Then, printing this will take O(m*n) time, 
-# which is our best conceivable time complexity for this because we know we have to 
-# print out all of the white and black squares in our range.
+# If the board begins as an alternating checkerboard of white and black
+# squares, which is one plausible reading the of the problem description, then
+# regardless of the square the ant starts on, its movement is repetitive and
+# not too exciting. It immediately begins a simple cycle that travels 
+# diagonally, flipping all of the squares it touches and never doubling back.
 
-# let's also decide that the printed board will be square, so we pick whichever is 
-# the max of m and n and make those the dimensions. And then have a buffer of one 
-# around the whole thing just so it looks nicer.
+#  _______________________                       _______________________
+# │█ █ █ █ █ █ █ █ █ █ █ █│                     │█ █ █ █ █ █ █ █ █ █ █ █│
+# │ █ █ █ █ █ █ █ █ █ █ █ │                     │ █ █ █ █ █ █ █ █ █ █ █ │
+# │█ █ █ █ █ █ █ █ █ █ █ █│                     │█ █ █ █ █ █ █ █ █ █ █ █│
+# │ █ █ █ █ █ █ █ █ █ █ █ │        ==\          │ █ █ █ █ ███ █ █ █ █ █ │
+# │█ █ █ █ █ █ █ █ █ █ █ █│        ==/          │█ █ █ █ █  ██ █ █ █ █ █│
+# │ █ █ █ █ █ █ █ █ █ █ █ │                     │ █ █ █ █ █  ██ █ █ █ █ │
+# │█ █ █ █ █ █ █ █ █ █ █ █│                     │█ █ █ █ █ █  ██ █ █ █ █│
+# │ █ █ █ █ █ █ █ █ █ █ █ │                     │ █ █ █ █ █ █  ██ █ █ █ │
+# │█ █ █ █ █ █ █ █ █ █ █ █│                     │█ █ █ █ █ █ █  ██ █ █ █│
+#  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯                       ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 
-# and for fun we can display where the ant is. 
+# On the other hand, if all of the squares are WHITE at the start, the ant
+# seems to have far more interesting behavior, so I am assuming that the 
+# intention of the problem is to simulate an ant on this type of grid. (As it
+# turns out, this makes for simpler simulation of the grid because of the data
+# structure I chose to use for the problem.)
 
-# memory for this is O(m*n) because of the requirement to create and store the matrix
-# before printing it out, but even if there were a way for us to do that, we would 
-# still need to store O(b) where b is the number of black squares, which within the 
-# domain we are going to print is somewhere in O(m*n) as well, though we are not sure
-# without knowing more about the pattern how much this is. 
+# Rather than maintian a matrix, whose boundaries I would need to expand
+# whenever the ant steps beyond its initial size, I chose to maintain a SET of
+# squares that are black. This means that, with my above assumption about the 
+# initial state of the grid, I can initialize the board as an empty set. 
 
-def f1(k):
+# In O(1) time, we can ADD to this set when a white square becomes black, 
+# REMOVE from the set when a black square turns white, and check color of a 
+# square by checking for set membership in O(1). This means that with each of 
+# the K steps of the ant, we can update its position and the state of the grid 
+# in a constant number of operations. So can update the grid in O(K) time, and 
+# end with a set of at most K spaces that remain black after all the flips.  
 
-    black_tiles = set()
-    i_bounds, j_bounds = [0,0], [0,0]
-    
-    i,j = 0,0         # starting position
-    di,dj = 1,0       # starting direction
-    
-    for _ in range(k):
-    
-        # white space
-        if (i,j) not in black_tiles:
-            black_tiles.add((i,j))
-            di,dj = rotate_90(di,dj,1)     # rotate right
-            i,j = i+di, j+dj               # step forward one space
+# As for printing the board, I chose to keep track of the farthest up, down, 
+# right, and left that the ant has traveled, find the maximum of these values, 
+# double it, add one for padding to create a value D, and then draw a square 
+# cenetered at (0,0) with side length D. We can then either build and then 
+# join a list of characters to form a string to print, or write a function 
+# that without storing a full string to represent the output, prints each 
+# character in the grid top-left to bottom-right. Either way, this should take
+# O(D^2) time.
+
+# Total memory constraints depend partly on whether we want to build up (and 
+# thus store) the O(D^2) characters for the grid, or print each character 
+# immediately. In the second option, we are either writing to the terminal in 
+# interactive mode, or perhaps writing to an external file or redirecting
+# output elsewhere, so there is no O(D^2) storage overhead on the process 
+# running the function. I chose this second option, but there are drawbacks;
+# for example, if the program terminates unexpectedly before finishing the 
+# drawing task, then the output, whether on the terminal or in some file, will
+# be an incomplete drawing rather than a lack of any drawing at all, so it 
+# would be important to check that the process running this program exited 
+# correctly before "trusting" the drawing. 
+
+# Regardless, this function still requires O(B) space, where B is the number 
+# of black squares stored in the set, and we also know that B cannot be
+# greater than K so this is O(K) space.  
+
+# For fun, I also found some Unicode characters to display the ant's position 
+# and direction on each color tile. 
         
-        # black space
+class Ant:
+    """A representation of an ant's current position and direction.
+    
+    Atrributes:
+        x: An int. The ant's x-axis position.
+        y: An int. The ant's y-axis position.
+        dx: An int. 1 when ant faces right, -1 when left, 0 otherwise.
+        dy: An int. 1 when ant faces up, -1 when down, 0 otherwise.
+    """
+    
+    def __init__(self):
+        """Inits Ant instance facing right on origin point."""
+        self.x = 0
+        self.y = 0
+        self.dx = 1
+        self.dy = 0
+    
+    def facing_right(self):
+        return self.dx == 1 and self.dy == 0
+    
+    def facing_down(self):
+        return self.dx == 0 and self.dy == -1
+    
+    def facing_left(self):
+        return self.dx == -1 and self.dy == 0
+    
+    def facing_up(self):
+        return self.dx == 0 and self.dy == 1
+    
+    def facing_horizontal(self):
+        return self.dx != 0 and self.dy == 0
+    
+    def facing_vertical(self):
+        return self.dx == 0 and self.dy != 0
+    
+    def get_position(self):
+        """Returns a hashable tuple of the ant's position."""
+        return (self.x,self.y)    
+    
+    def rotate_right(self):
+        self._rotate_90(True)
+    
+    def rotate_left(self):
+        self._rotate_90(False)
+        
+    def _rotate_90(self,right):
+        """Changes dx,dy such that ant has turned 90 degrees.
+        
+        Args:
+            right: A Boolean. If False, interpreted as left turn.
+        """
+        dir = 1 if right else -1
+        if abs(self.dy) == 0:  # True when ant is facing right or left.
+            self.dy = (self.dy-self.dx) * dir
+            self.dx = 0
+        else:                  # True when ant is facing up or down.
+            self.dx = (self.dx-self.dy) * dir * -1
+            self.dy = 0
+        
+    def step_forward_one(self):
+        """Changes x,y according to dx,dy to simulate ant's step."""
+        self.x += self.dx
+        self.y += self.dy
+
+class Grid:
+    """
+    Attributes:
+        SIDE_BORDER, BOTTOM_BORDER, etc.: Strings of length 1 
+          (characters) for drawing borders, tiles, and the ant in 
+          all directions. Treated as Class-wide, Class-specific 
+          constants and thus are Class attributes.
+        black_tiles: A set of tuples representing black tile locations.
+        ant: An Ant instance.
+        x_bounds, y_bounds: Lists of the most left and right, and of
+          the most down and up, that the ant has traveled.       
+    """
+    SIDE_BORDER = "│"  # NOT the pipe symbol. 
+    BOTTOM_BORDER = "¯"
+    TOP_BORDER = "_"
+    
+    BLACK_SPACE = "█"
+    WHITE_SPACE = " "
+    EMPTY_CHAR = " "
+    
+    RIGHT_ON_BLACK = "▶"
+    DOWN_ON_BLACK = "⯆"
+    LEFT_ON_BLACK = "◀"
+    UP_ON_BLACK = "⯅"
+
+    RIGHT_ON_WHITE = "R"
+    DOWN_ON_WHITE = "D"
+    LEFT_ON_WHITE = "L"
+    UP_ON_WHITE = "U"
+    
+    def __init__(self):
+        """Inits a Grid instance with no black tiles ."""
+        self.black_tiles = set()
+        self.ant = Ant()
+        self.x_bounds = [0,0]
+        self.y_bounds = [0,0]
+    
+    def one_langton_step(self):
+        """Simulates one step of the Langton's Ant's behavior."""
+        pos = self.ant.get_position()        
+       
+        # Ant must flip tile color and step forward in both cases, so 
+        # determine tile color and rotate ant first. 
+       
+        if self._tile_is_black(pos):
+            self.ant.rotate_left()            
         else:
-            black_tiles.remove((i,j))
-            di,dj = rotate_90(di,dj,-1)    # rotate left
-            i,j = i+di, j+dj               # step forward one space
+            self.ant.rotate_right()
+        self._flip_tile(pos)
+        self.ant.step_forward_one()
+        self._update_bounds()
     
-        # update bounds for drawing
-        for var,bounds in [(i,i_bounds),(j,j_bounds)]:
-            if var < bounds[0]:                # min
-                bounds[0] = var
-            elif var > bounds[1]:              # max
-                bounds[1] = var
+    def _tile_is_black(self,pos):
+        """Returns a Boolean."""
+        return pos in self.black_tiles
+    
+    def _flip_tile(self,pos):
+        """Adds or remove the tuple pos to indicate change in color."""
+        if pos in self.black_tiles:
+            self.black_tiles.remove(pos)
+        else:
+            self.black_tiles.add(pos)
+    
+    def _update_bounds(self):
+        """Determines if the the ant is the farthest has traveled in
+        any direction. Asumes that the ant has not rotated since last
+        taking a step.
+        """
+        if self.ant.facing_horizontal():
+            self._update_bound(self.ant.dx,self.ant.x,self.x_bounds)
+        else:
+            self._update_bound(self.ant.dy,self.ant.y,self.y_bounds)
+    
+    def _update_bound(self,dir,coord,bounds):
+        """Checks whether the ant has moved beyond its farthest 
+        traveled point along one dimension. Assumes that the ant has 
+        not rotated since last taking a step.
+        """
+        ind, cmp = (0,lt) if dir < 0 else (1,gt)
+        if cmp(coord, bounds[ind]):
+            bounds[ind] = coord
             
-    print_board(black_tiles,i_bounds,j_bounds,(i,j),(di,dj))
-        
-# roates di and dj right for dir=1, and left for dir=-1        
-def rotate_90(di,dj,dir):
+    def display(self):
+        """Prints an image of the grid and ant."""
 
-    if abs(dj) == 0:
-        dj = (dj-di) * dir
-        di = 0
-    else:
-        di = (di-dj) * dir * -1
-        dj = 0
+        # Determine dim to be the largest of A) 1+ the largest bound 
+        # found, or B) 5, and print all spaces from -dim to dim on both
+        # the x an y-axis. This ensures that the printed board is a 
+        # padded square centered around the ant's start at (0,0).
         
-    return di,dj
-        
-# given a set of black tiles and the maximum and minimum values for where the ant
-# has ever travleed, print the board. 
-def print_board(black_tiles,i_bounds,j_bounds,pos,dir):
-
-    # dimension is either the largest absolute bound we found, or 5...whichever is 
-    # largest. this ensures that the printed board is a square of tiles centered 
-    # around where the ant began at (0,0)
-    dim = max(5,1+max(max(max(abs(i_bounds[0]),abs(i_bounds[1])),abs(j_bounds[0])),abs(j_bounds[1])))
+        dim = max(5,1+max(map(abs,chain(self.x_bounds,self.y_bounds))))
+        self._print_top_border(dim)
+        for y in range(dim,-1*dim-1,-1):  # Print rows from top to bottom.
+            self._print_row(dim,y)        
+        self._print_bottom_border(dim)
     
-    # print the top border line
-    print(" ",end="")
-    for _ in range(2*dim+1):
-        print("_",end="")
-    print("\n",end="")
-        
-    # print each row
-    for j in range(dim,-1*dim-1,-1):
-        print("│",end="")                # start row
+    def _print_top_border(self,dim):
+        self._print_border(dim,self.TOP_BORDER)
+    
+    def _print_bottom_border(self,dim):
+        self._print_border(dim,self.BOTTOM_BORDER)
+   
+    def _print_border(self,dim,c):
+        """Prints a line representing a horizontal border."""
+        print(self.EMPTY_CHAR,end="")
+        for _ in range(2*dim+2):
+            print(c,end="")
+        print("\n",end="")
+    
+    def _print_row(self,dim,j):
+        """Prints a line for the jth row from the top (+dim)."""
+        print(self.SIDE_BORDER,end="")
         for i in range(-1*dim,dim+1,1):
-            
-            #print(i,j)
-            
-            if (i,j) == pos:
-                
-                if (i,j) in black_tiles: # black tile
-                    if dir == (1,0):
-                        print("▶",end="")
-                    elif dir == (0,-1):
-                        print("⯆",end="")
-                    elif dir == (-1,0):
-                        print("◀",end="")
-                    else:
-                        print("⯅",end="")
-                else:                    # white tile
-                    if dir == (1,0):
-                        print("R",end="")
-                    elif dir == (0,-1):
-                        print("D",end="")
-                    elif dir == (-1,0):
-                        print("L",end="")
-                    else:
-                        print("U",end="")
-                    
-            elif (i,j) in black_tiles:
-                print("█",end="")
+            if (i,j) == self.ant.get_position():
+                self._print_ant_space(self._tile_is_black((i,j)))
+            elif self._tile_is_black((i,j)):
+                print(self.BLACK_SPACE,end="")
             else:
-                print(" ",end="")
-        print("│",end="\n")              # end row
+                print(self.WHITE_SPACE,end="")
+        print(self.SIDE_BORDER,end="\n")              
+        
+    def _print_ant_space(self,on_black):
+        """Prints a space with the ant on it, showing its direction."""
+        if on_black: 
+            if self.ant.facing_right():
+                print(self.RIGHT_ON_BLACK,end="")
+            elif self.ant.facing_down():
+                print(self.DOWN_ON_BLACK,end="")
+            elif self.ant.facing_left():
+                print(self.LEFT_ON_BLACK,end="")
+            else:
+                print(self.UP_ON_BLACK,end="")
+        else:                    
+            if self.ant.facing_right():
+                print(self.RIGHT_ON_WHITE,end="")
+            elif self.ant.facing_down():
+                print(self.DOWN_ON_WHITE,end="")
+            elif self.ant.facing_left():
+                print(self.LEFT_ON_WHITE,end="")
+            else:
+                print(self.UP_ON_WHITE,end="")                    
     
-    # print the bottom border line
-    print(" ",end="")
-    for _ in range(2*dim+1):
-        print("¯",end="")
-    print("\n",end="")
+def f2(k):
+    """Given non-negative integer k, simulates a Langton's ant taking k
+    steps and then prints the resulting grid.
     
+    Raises:
+        ValueError: k is negative.
+    """
+    if k < 0:
+        raise ValueError("Invalid input: k must be non-negative.")
     
-    print("⇦")
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-
-
-
-
-
-
-
-
-
-
-
+    grid = Grid()
+    for _ in range(k):
+        grid.one_langton_step()
+    grid.display()

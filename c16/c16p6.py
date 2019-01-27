@@ -49,7 +49,6 @@ def f1(A,B):
         An integer difference, or None if at least one of A or B is 
         empty.
     """
-    
     if len(A) < 1 or len(B) < 1: return 
     
     # We sort the lists in place, but if it is required that the 
@@ -100,7 +99,6 @@ def f1(A,B):
     
 def test():
     """Tests some example inputs.
-    """
-    
+    """  
     assert f1([1,3,15,11,2],[23,127,235,19,8]) == 3
     assert f1([5,6,77,35,78,1,45,98],[245,676,111,344,766,800]) == 13

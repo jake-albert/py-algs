@@ -1,3 +1,5 @@
+from math import floor, ceil    
+
 # c16p7
 
 # Number Max: Write a method that finds the maximum of two numbers. You should
@@ -17,15 +19,12 @@ def f1(a,b):
     
     Returns:
         An int if both inputs are ints, and a float otherwise.
-    """
-    
+    """  
     return ((0 ** (a // b)) * b) + ((0 ** (b // a)) * a)
     
 # The second approach exploits the fact that a-b is negative when b is max, 
 # positive when a-b is positive, and 0 when a is equal to b.
-    
-from math import floor, ceil    
-    
+        
 def f2(a,b):
     """Returns the maximum of two numbers.
     
@@ -58,7 +57,7 @@ def f2(a,b):
 # have a signed bit that can be determined in O(logN) time for large integers. 
 
 # For float inputs, more steps would be needed to get a bit representation of 
-# the input.
+# the input involving other Python libraries.
     
 def f3(a,b):
     """Returns the maximum of two integers.
@@ -70,7 +69,6 @@ def f3(a,b):
     Returns:
         An int.
     """
-
     diff = a-b
     val = (diff)>>(diff.bit_length())  # -1 if b>a, 0 otherwise
     return -1* (val*b + ~val*a)
