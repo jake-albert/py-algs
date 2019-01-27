@@ -1,6 +1,6 @@
 # py-algs  
 Author: Jake Albert  
-Comprehensive review of algorithms and data structures in Python 3.  
+Comprehensive review of algorithms and data structures written and tested on Python 3.7.0.  
 Designed for side-by-side viewing of source code and testing in interactive mode in a terminal.   
 Acknowledgement: Majority of practice problems sourced from *Cracking the Coding Interview, 6th Edition* ("CCI6") by Gayle Laakman McDowell.
 
@@ -28,5 +28,5 @@ Usage:
          >>> c16p13.f1(28)  
          6  
          >>> c16p13.test()  
-         >>>                # this test function uses assert statements so no output when correct.
+         >>>                # Uses assert statements so no output when correct.
       
