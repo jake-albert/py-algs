@@ -8,13 +8,20 @@ from itertools import chain
 
 ##############################################################################
 
+# One note: It is possible to input a tic-tac-toe board that has multiple 
+# winning streaks, either by X or by O or by both. This instance of a board
+# would not be possible in a real game, since the game ends once there is one
+# winning streak, but it is perfectly possible as an arbitrary input. We can
+# either raise an exception and reject such a board upon identifying it, or 
+# return True upon finding any winning streak. I chose the SECOND option.
+
 # I take as input an NxN matrix, and assume that the matrix is well-formed. 
 # In other words, the input is an N-length list of N-length lists, and that 
 # the only objects held are the strings "X", "O", and "_" for blank.
 
 # It is possible to use enums as defined below, or to design a class for a 
 # tic-tac-toe board with methods for checking individual rows and columns, 
-# but for this problem I chose to handle the input simply as a list of list 
+# but for this problem I chose to handle the input simply as a list of lists 
 # of one-character strings.
 
 class Square(enum.Enum):
@@ -23,18 +30,17 @@ class Square(enum.Enum):
     o = 2
     b = 3
 
-# One note: It is possible to input a tic-tac-toe board that has multiple 
-# winning streaks, either by X or by O or by both. This instance of a board
-# would not be possible in a real game, since the game ends once there is one
-# winning streak, but it is perfectly possible as an arbitrary input. We can
-# either raise an exception and reject such a board upon identifying it, or 
-# return True upon finding any winning streak. I chose the SECOND option.
-
 # The following brute-force approach checks every way that the board can be
-# won. For extremely large boards, algorithms such as f2 might be faster, 
-# but if this function were to be used only on boards of dimensions 3 or 4
-# or so, there is little to worry about as it is still in O(N^2) time, which 
-# is the best conceivable runtime for the problem. O(1) space requirements.
+# won. I assume that we do not know where the most recent change to the board 
+# was; it is as if the board fell down from the heavens without context, and 
+# we are asked to identify whether a winning streak exists or not. For 
+# extremely large boards, algorithms such as f2, which uses a class that 
+# abstracts the board into winnable "zones", might be faster, but if this 
+# function were to be used only on boards of dimensions 3 or 4 or so, there is
+# little to worry about the duplicated work in the simpler f1. Regardless, 
+# both run in O(N^2) time, which is the best conceivable runtime for the
+# problem when we have no additional knowledge about the state of the game.
+# In addition, f1 has O(1) space requirements.
 
 # We assume that n is greater than 1 in this solution.
     
@@ -111,8 +117,8 @@ def check_diagonals(board,n):
     """
 
     # If top-left to bottom-right is found to have been won, return 
-    # True early. Otherwise, must check top-right to bottom-left.
-
+    # True early. 
+    
     tlbr_flag = True  
     sym = board[0][0]
     if is_blank(sym): tlbr_flag = False
@@ -123,6 +129,8 @@ def check_diagonals(board,n):
     
     if tlbr_flag: return True
         
+    # Otherwise, must check top-right to bottom-left.
+        
     sym = board[0][n-1]
     if is_blank(sym): return False
     
@@ -132,10 +140,29 @@ def check_diagonals(board,n):
     
     return True
 
-# But the above approach requires more checks of individual squares than is 
-# necessary, though. The below approach visits each square only once and then
-# increments a counter for the correpsonding rows, columns, and diagonals, 
-# returning True immediately upon detecting a full streak.
+# The above approach requires more checks of individual squares than is 
+# necessary. The below approach, f2, visits each square only once and then
+# increments a counter of each symbol for the correpsonding rows, columns,
+# and diagonals.
+
+# Given that this approach requires O(N) memory to store counters for each 
+# of the rows, columns, and diagonals, there is a bit of a tradeoff. In 
+# addition, the "work" done at each visit to a square, which involves finding 
+# all of the rows, column, and diagonals in which it belongs and updating 
+# them, is greater than that done at each square in f1, so it is not 
+# immediately obvious that f2 should have constant-factor improvements to 
+# runtime.
+        
+# Perhaps with some added optimzations, such as if the function were to keep
+# track (at a greater memory cost) of which zones are still "in the running" 
+# to be won, and systematically "rule out" ones with blank spaces or with at 
+# least one of each an X and an O, then it could improve runtime more.
+
+# But the below function, which builds a complete picture of the board before 
+# identifying whether there is a winner or not, serves to build information 
+# on the zones incrementally and could serve as the model to for a function
+# that identifies a win in O(1) time after each turn is completed in a real
+# game as it progresses.
 
 class Zone:
     """Contains information about a row, column, or diagonal.
@@ -162,24 +189,6 @@ class Zone:
     def is_won(self):
         """Returns whether or not zone is filled with one symbol."""
         return self.x == self.len or self.o == self.len
-
-# Given that this approach requires O(N) memory to store counters for each 
-# of the rows, columns, and diagonals, there is a bit of a tradeoff. In 
-# addition, the "work" done at each square, which involves finding all of 
-# the rows, column, and diagonals in which it belongs and updating them, is 
-# greater than that done at each square in f1, so it is not immediately 
-# obvious that f2 should have constant-factor improvements to runtime.
-        
-# Perhaps with some added optimzations, such as if the function were to keep
-# track (at a greater memory cost) which zones are still "in the running" to 
-# be won, and systematically "rule out" ones with blank spaces or with at 
-# least one of each an X and an O, then it could improve runtime more.
-
-# But the below function, which builds a complete picture of the board before 
-# identifying whether there is a winner or not, serves to build information 
-# on the zones incrementally and could serve as the model to for a function
-# that identifies a win in O(1) time after each turn is completed in a real
-# game as it progresses.
        
 def f2(board):
     """Returns True if a board for tic-tac-toe has been won, and False

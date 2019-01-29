@@ -1,13 +1,20 @@
 import sys
 sys.path.append('..')
 from data_structs import Stack
+from itertools import chain
 
 # c16p08
 
-# English lnt: Given any integer, print an English phrase that describes the
+# English Int: Given any integer, print an English phrase that describes the
 # integer (e.g., "One Thousand, Two Hundred Thirty Four").
 
 ##############################################################################
+
+# I emulate the formatting of the example return string. (No "and", comma use,
+# capitalization, no-hyphens.) I also follow this formatting in the rare cases
+# where it reads a bit unnaturally, possibly due to our quick reading of year 
+# names ("Two Thousand, Nineteen"). While I could identify these instances and 
+# omit a comma, I chose not to here for consistency.
 
 # First, it is worth asking about the max expected value of the integer. If it
 # is a 4-byte signed integer then it has a max absolute value between 2 and 3 
@@ -33,7 +40,7 @@ def f1(n):
         n: Any int with absolute value less than one nonillion (10^30).
         
     Raises:
-        ValueError: int has absolute value greater than 10^30.
+        ValueError: n has absolute value greater than 10^30.
     """   
     if n == 0:
         print("Zero")
@@ -63,7 +70,60 @@ def f1(n):
         
         output_stack.push(three_digit_string(hundreds,tens,ones))
         group += 1
+   
+    print_output(output_stack,neg,group)
     
+def three_digit_string(hundreds,tens,ones):
+    """Given three integers 0-9 inclusive, prints the string 
+    representing the number formed by these numbers interpreted as
+    digits when read out loud.
+    
+    Args:
+        hundreds: An int representing the hundreds digit.
+        tens: An int representing the tens digit.
+        ones: An int representing the ones digit.
+        
+    Returns:
+        A string.
+        
+    Raises:
+        IndexError: A digit greater than 9 has been input.
+    """
+    output_list = []
+    
+    # When hundreds digit is zero, go immediately to tens digit.
+    
+    if hundreds > 0:
+        output_list.append(digits[hundreds])
+        output_list.append("Hundred")
+    
+    # If the tens digit is one, then strings like "Twelve" and
+    # "Seventeen" are used. If not, strings like "Twenty" and "Seventy"
+    # are used, and the ones digit is independently consulted.
+    
+    if tens == 1:
+        output_list.append(teens[ones])
+    else:
+        if tens > 0:
+            output_list.append(decades[tens])
+        if ones > 0:
+            output_list.append(digits[ones])
+    
+    return(" ".join(output_list))
+    
+def print_output(output_stack,neg,group):
+    """Prints an English phrase that describes an integer.
+    
+    Args:
+        output_stack: A Stack inistance loaded with strings of 3-digit 
+          groups, with the most significant group at the top.
+        neg: A Boolean. True if negative, False otherwise.
+        group: An int representing the highest "group" (thousands,
+          millions, etc. that the integer encompasses.
+        
+    Raises:
+        ValueError: Integer to print has absolute value greater than 10^30.
+    """
     output_list = []  # List of strings to be joined at the end.
     
     if neg:
@@ -71,8 +131,8 @@ def f1(n):
       
     comma = False  # Do not print comma until first group is appended.
         
-    while group >= 0:        
-        
+    while not output_stack.is_empty():
+    
         group_description = output_stack.pop()
         
         # Skip the group and group name altogether if "000". For 
@@ -101,40 +161,19 @@ def f1(n):
     
     print("".join(output_list))
     
-def three_digit_string(hundreds,tens,ones):
-    """Given three integers 0-9 inclusive, prints the string 
-    representing the number formed by these numbers interpreted as
-    digits when read out loud.
-    
-    Args:
-        hundreds: An int representing the hundreds digit.
-        tens: An int representing the tens digit.
-        ones: An int representing the ones digit.
-        
-    Returns:
-        A string.
-        
-    Raises:
-        IndexError: A number greater than 9 has been input.
-    """
-    output_list = []
-    
-    # When hundreds digit is zero, go immediately to tens digit.
-    
-    if hundreds > 0:
-        output_list.append(digits[hundreds])
-        output_list.append("Hundred")
-    
-    # If the tens digit is one, then strings like "Twelve" and
-    # "Seventeen" are used. If not, strings like "Twenty" and "Seventy"
-    # are used, and the ones digit is independently consulted.
-    
-    if tens == 1:
-        output_list.append(teens[ones])
-    else:
-        if tens > 0:
-            output_list.append(decades[tens])
-        if ones > 0:
-            output_list.append(digits[ones])
-    
-    return(" ".join(output_list))
+def test():
+    """Tests various cases."""
+    inputs = chain(range(1,150,7),  \
+                   [0,              \
+                    1006,           \
+                    7917,           \
+                    4587,           \
+                    10345,          \
+                    816789,         \
+                    -111222333444,  \
+                    1000333000555,
+                    1000000008000000000000005])
+                    
+    for input in inputs:
+        print(f"{input}: ",end="")
+        f1(input)   

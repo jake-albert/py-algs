@@ -11,19 +11,21 @@
 # point that lies on the line segments, then I chose to return None. 
 
 # I also assume for this problem that the input is well-formed. An alternative
-# could be to implement a LineSeg class with p1, p2 attributes that enforces 
-# that the input be well-formed.
+# could be to implement a series of classes such as a LineSeg class with Point 
+# attributes p1, p2 that enforces that the input be well-formed, and a Line or 
+# Equation class to represent the slope and y-intercepts for each line. I take
+# this approach in later problems related to points, lines, and shapes, but it 
+# was still instructive developing a non-object-oriented solution.
 
 # The function examines a large number of cases but operates in O(1) time and 
 # with O(1) space requirements.
 
 def f1(ls_a,ls_b):
     """Returns a point of intersection between two line segments.
-
      
     If no such point exists, returns the None object. If the two
-    line segments are on the same line, then return just one point
-    that lies on both segments.
+    line segments have multiple points of intersection, then returns
+    just one point that lies on both segments.
     
     Args:
         ls_a: The first line segment. A list of two tuples of floats.
@@ -32,6 +34,10 @@ def f1(ls_a,ls_b):
     Returns:
         A tuple of floats representing (x,y) coordinates,
         OR the None object.
+        
+    Raises:
+        ValueError: The two end points of at least one line segment are
+        the same, indicating that the line segment is a point.
     """
     
     # Find the point of intersection of the two LINEs containing each
@@ -119,13 +125,13 @@ def get_equation(ls):
         A tuple of floats: slope then y-intercept.
         
     Raises:
-        Exception: the input is a point.
+        ValueError: the input is a point.
     """   
     x1,y1 = ls[0]
     x2,y2 = ls[1]
    
     if x1 == x2 and y1 == y2:
-        raise Exception(f"Invalid input: single point at ({x1},{y1})")
+        raise ValueError(f"Invalid input: single point at ({x1},{y1})")
    
     if x1 == x2:  # Vertical line
         return None, x1
@@ -217,8 +223,7 @@ def get_common_val(a1,a2,b1,b2):
     return b_start
     
 def test():
-    """Tests some sample inputs. Far from exhaustive.
-    """   
+    """Tests some sample inputs. Far from exhaustive."""   
     assert f1([(1.0,1.0),(2.0,2.0)],[(-1.0,-1.0),(1.0,1.0)]) == (1.0,1.0)
     assert f1([(1.0,1.0),(0.0,0.0)],[(0.0,6.0),(6.0,0.0)]) == None
     assert f1([(0.0,0.0),(1.0,1.0)],[(1.0,0.0),(0.0,1.0)]) == (0.5,0.5)

@@ -12,16 +12,16 @@ class Stack:
         self.items.append(item)
         
     def pop(self):
-        if self.isEmpty():
+        if self.is_empty():
             return None
         return self.items.pop()
     
     def peek(self):
-        if self.isEmpty():
+        if self.is_empty():
             return None
         return self.items[len(self.items)-1]
         
-    def isEmpty(self):
+    def is_empty(self):
         return self.items == []
         
     # since the stack is implemented using an accessible list, it is possible to 

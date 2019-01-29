@@ -44,7 +44,7 @@ class Singly:
         return self
 
     # check if empty
-    def isEmpty(self):
+    def is_empty(self):
         return self.head is None
         
     # if not empty, remove the head and return it

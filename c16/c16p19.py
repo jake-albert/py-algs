@@ -83,7 +83,7 @@ def get_pond_size(i,j,M,memo,rows,cols):
     queue = DequeQueue()
     queue.add((i,j))
     
-    while not queue.isEmpty():
+    while not queue.is_empty():
         x,y = queue.remove()
         if (x,y) not in memo:
             memo.add((x,y))

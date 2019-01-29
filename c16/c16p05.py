@@ -18,15 +18,17 @@
 
 # BUT we must not also forget that 25 will contribute 2 5's, and that 125 
 # will contribute 3 5's, and so on. So for 26!, the correct number of 5's is 
-# equal to 5 (from 5,10,15,20,25) plus 1 (the 'second' 5 from 25). 
+# equal to 5 (from 5,10,15,20,25) plus 1 (the "second" 5 from 25). 
 
 # The algorithm performs a set of constant-time operations once for every
 # power of 5 that is less than or equal to the input. If the input size is of
-# fixed length, like a 32-bit unsigned integer, then it will take ceiling of log
-# base 5 of 4.3 billion or around 14 steps at most, so we can even argue that 
-# it will run in constant time. For arbitrarily long input, it runs in O(logN), 
-# with the log base 5 instead of log base 2, which is in linear time to the 
-# length of the input. No more than constant space requirements.
+# fixed length, like a 32-bit unsigned integer, then it will take ceiling of 
+# log base 5 of 4.3 billion or around 14 steps at most, so we can even argue 
+# that it will run in constant time. For arbitrarily long input, it runs in
+# O(logN), with the log base 5 instead of log base 2. This is in linear time
+# with respect to the length of the input. 
+
+# No more than O(1) space requirements.
 
 def f1(n):
     """Computes the number of trailing zeros in n factorial.
@@ -58,8 +60,7 @@ def f1(n):
     return count
     
 def test():
-    """Tests some sample inputs.
-    """
+    """Tests some sample inputs."""
     pairs = [(5,1),
              (12,2),
              (67,15)]

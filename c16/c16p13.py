@@ -6,10 +6,11 @@
 
 ##############################################################################
 
-# It might help to ask whether what is wanted here is a line, as in a line 
+# It would help to ask whether what is wanted here is a line, as in a line 
 # that extends without and end in two directions, or a line segment that ends
 # where it intersects with the outermost sides of the given squares. I am 
-# assuming that the desire is for a LINE, not a LINE SEGMENT.
+# assuming that the desire is for a mathematical LINE expressed with a linear
+# equation, not a LINE SEGMENT.
 
 # In order to define a unique square with top and bottom sides parallel to the
 # x-axis, all we need are TWO values: a CENTER point, and also a SIDE LENGTH. 
@@ -108,10 +109,8 @@ def f1(sq1,sq2):
     of two input squares.
     
     Args:
-        sq1: A tuple of floats ((x,y),s), where x and y are the 
-             coordinates of the center of a square, and s the side
-             length.
-        sq2: "                                                   "
+        sq1, sq2: Tuples of floats ((x,y),s), where x and y are the 
+          coordinates of the center of a square, and s the side length.
     
     Raises:
         ValueError: A square with side length <= 0 has been input.

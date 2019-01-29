@@ -6,7 +6,7 @@
 #
 # Element --> Tag Attributes END Children END
 # Attribute --> Tag Value
-# END --> e
+# END --> 0
 # Tag --> some predefined mapping to int
 # Value --> string value
 #
@@ -15,24 +15,25 @@
 # lastName -> 4, state-> 5).
 #
 # <family lastName="McDowell" state="CA">
-# <person firstName="Gayle">Some Message</person>
+#   <person firstName="Gayle">Some Message</person>
 # </family>
+#
 # Becomes:
-# 1 4 McDowell 5 CA e 2 3 Gayle 0 Some Message e e
+#
+# 1 4 McDowell 5 CA 0 2 3 Gayle 0 Some Message 0 0
 #
 # Write code to print the encoded version of an XML element (passed in Element
 # and Attribute objects). 
 
 ##############################################################################
 
-# First, given that the input are Element objects, it is helpful to develop 
-# classes for these. (I assume for this problem that the input can be only 
-# instances of the Element class, not of the Attribute class.)
+# First, given that the input consist of Element and Attribute objects, it is
+# necessary to develop classes for these.
 
 # The grammar is somewhat unclear so it would be important to clarify: Can 
 # CHILDREN be any number of Elements? Or can CHILDREN also contain Values, 
-# such as a string "some message"? My implementation puts no restrictions
-# on what kinds of objects can be CHILDREN.
+# such as a string "Some Message"? My implementation assumes that each child 
+# in CHILDREN can be only an Element or Attribute instance, or a string.
 
 # I use the mapping from the example in the problem description:
 
@@ -76,43 +77,78 @@ class Attribute:
         self.tag = mapping[tag]
         self.value = value
 
-# The first approach works recursively through the grammar and assume that the
-# Element is well-formed. It constructs the string by appending its components
-# to a list, then joins and prints this list at the end.
+# The below approach works recursively through the grammar and assume that the
+# input is either a well-formed Element or a well-formed Attribute instance. 
+# It constructs the string by appending its components to a list, then joins
+# and prints the resulting string.
+
+class Builder:
+    """String builder for encodings."""
+    
+    def __init__(self):
+        """Inits a Builder instance for an empty encoding."""
+        self.b = []
+    
+    def grab(self,st):
+        """Adds another string to the encoding."""
+        self.b.append(st)
+    
+    def to_encoding(self):
+        """Returns a correctly-spaced encoding string."""
+        return " ".join(self.b)
 
 def f1(elem):
     """Prints the encoded version of an XML Element.
     
     Args:
-        elem: A well-formed Element instance.
+        elem: A well-formed Element or Attribute instance.
     """
-    builder = []
-    print_elem(elem,builder)
-    print(" ".join(builder))
+    builder = Builder()
+    parse_object(elem,builder)
+    print(builder.to_encoding())
     
-def print_elem(elem,builder):
+def parse_object(thing,builder):
     """Appends to builder strings that, if joined together with 
     spaces, would form the encoded version of an input XML Element.
     
     Args:
-        elem: A well-formed Element instance.
+        elem: A well-formed Element or Attribute instance.
         builder: A list.
     """  
-    builder.append(str(elem.tag))
-    for attr in elem.attributes:
-        builder.append(str(attr.tag))
-        builder.append(attr.value)
-    builder.append("0")
-    for chld in elem.children:
-        try:                          # Child could be an element object.
-            print_elem(chld,builder)  
-        except:                       # Alternatively, child could be string.
-            builder.append(chld)           
-    builder.append("0")
     
+    # Both Element and Attribute instances are encoded first by their 
+    # "tag" attribute. After this, we determine thing's type. If it has
+    # a "value" attribute, we treat thing as an Attribute instance. 
+    # Otherwise, we treat thing as an Element instance.
+        
+    builder.grab(str(thing.tag))
+    
+    try:
+    
+        builder.grab(thing.value)
+    
+    except:
+    
+        for attr in thing.attributes:
+            parse_object(attr,builder)
+        
+        builder.grab("0")
+    
+        # Each child is either another Element or Attribute instance, 
+        # in which case it can be parsed recursively, or it is a 
+        # string, in which case it may be grabbed immediately.
+    
+        for chld in thing.children:
+            
+            try:
+                parse_object(chld,builder)  
+            except:
+                builder.grab(chld)
+        
+        builder.grab("0")        
+
 def test():
-    """Tests the (non-exhaustive) example from the problem description.
-    """  
+    """Tests on both an Element and Attribute instance."""  
     input1 = Element("family",                                   \
                      [Attribute("last_name","McDowell"),         \
                       Attribute("state","CA")],                  \
@@ -120,4 +156,7 @@ def test():
                               [Attribute("first_name","Gayle")], \
                               ["Some Message"])])                 
     
+    input2 = Attribute("last_name","Carmichael")
+    
     f1(input1)
+    f1(input2)

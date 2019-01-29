@@ -9,10 +9,15 @@
 # (Discussion only for this problem.)
 
 # It is important first that there be a consistent definition of word
-# boundaries and caps-sensitivity for the book. Assuming that such a 
-# definition has been agreed on and that the book has been parsed once 
-# according to these rules, we may consider the "book" as a list of numbers,
-# where each number corresponds to a unique word. 
+# boundaries and caps-sensitivity for the book. (For example, should all words 
+# be converted to only lower-case characters before being compared with each 
+# other? Are hyphenated words always considered single words, or should they 
+# be split in certain cases? Ex. friendly-looking vs. two-year-old.) 
+
+# Assuming that such a definition has been agreed on and that the book has been
+# tokenized according to these rules (perhaps using the NLTK library), we may 
+# consider the "book" as a list of numbers, where each number corresponds to a
+# unique word. 
 
 # If we were running this only ONCE for a single word, then we need to store 
 # only one variable, a count value, and iterate through the words of the book 

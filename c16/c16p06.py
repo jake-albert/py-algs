@@ -33,9 +33,9 @@
 # all values in a second list. [1,2,3,4] and [7,8,9,10] has a min diff of 3. 
 
 # Sorts takes O(MlogM + NlogN) time, and reading heads O(M+N) time, so overall 
-# the function needs O(mlogm + nlogn) time and requires O(1) assuming the 
-# sorts are implemented in place. We assume that the input is correctly formed
-# (no non-integer objects in the lists).
+# the function needs O(MlogM + NlogN) time and requires O(1) space assuming 
+# the sorts are implemented in place, such as with quicksort. We assume that 
+# the input is correctly formed (no non-integer objects in the lists).
 
 def f1(A,B):
     """Returns the difference between the pair of values with the 

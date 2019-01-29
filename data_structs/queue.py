@@ -17,15 +17,15 @@ class LinkedListQueue:
         self.queue.insert_head(item)
     
     def remove(self):
-        if not self.isEmpty():
+        if not self.is_empty():
             item = self.queue.tail.val
             return self.queue.remove_tail()
     
     def peek(self):
-        if not self.isEmpty():
+        if not self.is_empty():
             return self.queue.tail.val
         
-    def isEmpty(self):
+    def is_empty(self):
         return self.queue.size == 0
 
 from collections import deque
@@ -47,7 +47,7 @@ class DequeQueue:
     def peek(self):
         return self.queue[-1]
         
-    def isEmpty(self):
+    def is_empty(self):
         return len(self.queue) == 0
         
     def __len__(self):
