@@ -159,6 +159,3 @@ def test():
     
     for input in inputs:
         print(f1(input),f2(input))
-    
-    
-    

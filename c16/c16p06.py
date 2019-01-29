@@ -1,4 +1,4 @@
-# c16p6
+# c16p06
 
 # Smallest Difference: Given two arrays of integers, compute the pair of 
 # values (one value in each array) with the smallest (non-negative) 

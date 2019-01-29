@@ -1,4 +1,4 @@
-# p2
+# p02
 
 # An exercise in recursion and combinatorics thought up by my friend Ben. 
 #

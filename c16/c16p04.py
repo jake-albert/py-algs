@@ -1,7 +1,7 @@
 import enum
 from itertools import chain
 
-# c16p4
+# c16p04
 
 # Tic Tac Win: Design an algorithm to figure out if someone has won a game of
 # tic-tac-toe. 

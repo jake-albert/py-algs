@@ -128,6 +128,3 @@ def test():
             s2 = sum(input[1]) - pair[1] + pair[0]
             if s1 != s2:
                 print("ERROR: ",input,pair)
-        
-        
-        

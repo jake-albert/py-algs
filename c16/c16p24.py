@@ -1,37 +1,65 @@
-# start
+from operator import le, ge
 
-# there is an O(n**2) solution that involves trying every pair of values. 
-# there is also an O(nlogn) solution that involves SORTING the list first, and 
-# then simultaneously traversing from the back towards the front and then the 
-# front to the back. This last part runs in linear time so the bulk of time is sorting
+# c16p24
 
-# ex for the sum of 3, and a list that sorts to [-6,-5,-1,7,8,9,15], we start 
-# with -6 and 15 then move to -6 and 9 which checks out and then to -5 and 8 
-# which works and then -1 7 which does not. This would be in O(nlogn) time and O(1) space
-# and if the array is PROVIDED sorted, then it can be solved in O(n) time
+# Pairs with Sum: Design an algorithm to find all pairs of integers within an
+# array which sum to a specified value. 
 
-# best conceivable runtime is O(n) since presumably you need to look at each value
-# at least once! Can we actually make it work though? yes. 
+##############################################################################
 
-# there is also a linear time solution that involves hashing values or using a set
-# which I will demonstrate below. It requires also O(n) space
+# First, we must clarify how to handle duplicate elements in a list that sum 
+# to the same value, such as in the list [1,1,2] for sum 3. Should the 
+# function return (1,2) once, sticking only to unique pairs of values, or
+# twice to indicate that there are two pairs of ELEMENTS that sum to 3?
 
-# first, there would need to be a discussion with the interviewer about the handling 
-# of duplicates, as the wording is somewhat ambiguous.
+# For this problem I chose the first option, but still assume that duplicate 
+# integers can be present in the input.
 
-# Say that the specified value is 3 and the array is [5,-2,0,3,0,3]. There are two 
-# UNIQUE pairs of integers that add to 3, namely [5 and -2] and [3 and 0], but in 
-# terms of pairs of values in the list, there is (0a,3a),(0,3b),(0b,3a),and(0b,3b) 
-# on top of the (-2,5). In some cases it may be necessary to know this, and in others
-# it may be uncecessary to know. 
+# There is an O(N^2) solution that involves summing each pair of values and 
+# returning each pair that sums to the value. There is also an O(NlogN) 
+# solution that involves SORTING the list first, and then traversing from both
+# front and back with two read heads. This second part runs in linear time, so 
+# the time bottleneck is from sorting.
 
-# for the purposes of this problem, I am just going to have the algorithm output 
-# only UNIQUE unordered pairs of integers, but will assume that duplicates can be 
-# present in the input list.  
+# For example, when the sum is 3, and the list sorts to [-6,-5,-1,7,8,9,15], 
+# we start with read heads on -6 and 15. They sum to 9, which is larger than 
+# the desired sum of 3, so we now know that 15, the largest value in the list,
+# cannot possibly be part of a pair that sums to 3, as even when it is summed 
+# with the lowest value in the list, it exceeds 3. So we move to -6 and 9, 
+# which sum to 3. And this allows us to move inward on both ends to -5 and 8, 
+# and so on. 
+
+# This approach takes would be in O(NlogN) time and O(1) space if we sort in 
+# place with quicksort. If the array is PROVIDED sorted, then the solution 
+# runs in O(N) time. Since we can detect sortedness in O(N) time, we can 
+# check for sortedness to determine whether to sort first or not.
+
+# But there is also an O(N) approach on an unsorted list that requires hashing
+# each value in the array, so it also requires also O(N) space.
+
+# The below function takes a balance between optimizing for time and space. It 
+# runs the O(N) time, O(1) space algorithm on sorted inputs (regardless of 
+# whether they are increasing or decreasing), and runs the O(N) time, O(N)
+# space algorithm on other inputs. To optimize time only, it could eschew the 
+# check for sortedness and eat the O(N) memory cost on all inputs, and to 
+# optimize space only, it could sort every input in place in order to run the 
+# O(1) space algorithm.
 
 def f1(lst,val):
-
-    # no pairs possible if list has 0 or 1 elements 
+    """Returns a set of tuples representing all unique pairs of 
+    integers in an input list that sum to a value.
+    
+    Args:
+        lst: A list of integers.
+        val: An integer.
+        
+    Returns:
+        A set of tuples of integers, each tuple in increasing order.
+    """
+    
+    # There are no pairs of values in a list with 0 or 1 values, so 
+    # we can return an empty set immediately.
+    
     if len(lst) < 2:
         return set()               
 
@@ -42,45 +70,67 @@ def f1(lst,val):
     else:
         return find_pairs_unsorted(lst,val)
         
-# O(n) time algorithm to find whether a list is sorted in any order
-# ASSUMES length of at least 2 for the lst.       
 def is_sorted(lst):
+    """Determines in O(N) time whether a list is sorted. Assumes that 
+    the list is of at least length 2.
     
-    # determine whether to test for increasing or decreasing
-    for i in range(0,len(lst)-1):
-        
-        # continue until we reach a point where lst[i] differs from lst[i+1]
+    Args:
+        A list of integers.
+    
+    Returns: 
+        A Boolean indicating whether the list is sorted or not, and 
+        a Boolean indicating whether, if sorted, it is in increasing 
+        or decreasing order.
+    """
+    
+    # Continue through the list until reaching an index whose value 
+    # differs from the value at the following index. Determine there 
+    # whether to test for increasing or decreasing order and attempt
+    # to verify the rest of the list.
+    
+    for i in range(0,len(lst)-1):    
         if lst[i] == lst[i+1]:
             continue
-        
+       
         if lst[i] < lst[i+1]:
-            cmp = lambda x,y: x <= y
+            cmp = le
             inc = True
         else:
-            cmp = lambda x,y: x >= y
+            cmp = ge
             inc = False
         break
     
-    # for the remainder of the indeces, check using the comparator
     for j in range(i+1,len(lst)-1):
         if not cmp(lst[j],lst[j+1]):
             return False, inc
     return True, inc
  
-# O(n) time algorithm that requires O(1) space for an already-sorted array
 def find_pairs_sorted(lst,val,inc):
+    """Returns a set of tuples representing all unique pairs of 
+    integers in an input list that sum to a value. Assumes that the 
+    list is sorted.
     
-    output = set()
-    left, right = 0, len(lst)-1
-    
-    # "pinch" in from left and right ends until we have tried all possible pairs
-    while left < right:
+    Args:
+        lst: A list of integers.
+        val: An integer.
+        inc: A Boolean. True if in increasing order, False otherwise.
         
+    Returns:
+        A set of tuples of integers, each tuple in increasing order.
+    """
+    output = set()
+    
+    # Create read heads on each end of the sorted list, and "pinch" in
+    # from both sides until all possible pairs have been tested.
+    
+    left, right = 0, len(lst)-1
+    while left < right:
+    
         sum = lst[left] + lst[right]
-        if sum < val:
+        if sum < val:  # The smaller of the values cannot be in a pair. 
             if inc: left += 1 
             else: right -= 1
-        elif sum > val:
+        elif sum > val:  # The larger of the values cannot be in a pair.
             if inc: right -= 1 
             else: left += 1
         else:
@@ -89,45 +139,36 @@ def find_pairs_sorted(lst,val,inc):
             right -= 1
     
     return output
-    
-# O(n) time algorithm that requires O(n) space for an unsorted array
-def find_pairs_unsorted(lst,val):
 
+def find_pairs_unsorted(lst,val):
+    """Returns a set of tuples representing all unique pairs of 
+    integers in an input list that sum to a value. 
+    
+    Args:
+        lst: A list of integers.
+        val: An integer.
+        inc: A Boolean. True if in increasing order, False otherwise.
+        
+    Returns:
+        A set of tuples of integers, each tuple in increasing order.
+    """
     output_set, search_set = set(),set()
     
-    for elem in lst:
+    # Each integer we see has either 1) not been designated as a 
+    # "partner" to some other integer, in which case we determine what
+    # integer would be its "partner" and add that to the set of 
+    # "partners", or 2) has been designated as a "partner", in which 
+    # case we add the pair to the output.
     
-        # the value that would sum to val with elem
-        comp = val - elem
-        
-        # elem has been designated as a partner to find
-        if elem in search_set:
-        
-            # create a standard ordering and store in results
-            lo, hi = min(elem,comp), max(elem,comp)  
-            output_set.add((lo,hi))
-        
-        # elem has not been designated, so insert its comp to search for down the road
+    for elem in lst:
+        partner = val - elem  # The int that sums with elem to val.
+        if elem in search_set: 
+            output_set.add((min(elem,partner),max(elem,partner)))
         else:
-        
-            search_set.add(comp)
+            search_set.add(partner)
             
-    # depending on how we want to use the output, can output as is in set form, or 
-    # alternatively as a list which would take O(n) time to generate
     return output_set
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+    
+# For increased confidence that the solution is correct, we could write the
+# O(N^2) brute-force solution to test f1 against over large numbers of input.
+# Might revisit this later.

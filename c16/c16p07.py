@@ -1,6 +1,6 @@
 from math import floor, ceil    
 
-# c16p7
+# c16p07
 
 # Number Max: Write a method that finds the maximum of two numbers. You should
 # not use if-else or any other comparison operator. 

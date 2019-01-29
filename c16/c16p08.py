@@ -2,7 +2,7 @@ import sys
 sys.path.append('..')
 from data_structs import Stack
 
-# c16p8
+# c16p08
 
 # English lnt: Given any integer, print an English phrase that describes the
 # integer (e.g., "One Thousand, Two Hundred Thirty Four").

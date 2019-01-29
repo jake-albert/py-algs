@@ -155,27 +155,3 @@ def test():
     
     for input in inputs:
         f1(*input)
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-            
-            
-            
-            
-            
-            
-            
