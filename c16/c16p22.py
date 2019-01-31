@@ -296,7 +296,7 @@ class Grid:
             else:
                 print(self.UP_ON_WHITE,end="")                    
     
-def f2(k):
+def f1(k):
     """Given non-negative integer k, simulates a Langton's ant taking k
     steps and then prints the resulting grid.
     

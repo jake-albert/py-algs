@@ -1,54 +1,78 @@
 from .doubly import Doubly
+from collections import deque
 
 class LinkedListQueue:
-    ''' Queue implemented with a doubly linked list. Note that if loading
-    the queue with a list of items during construction, the last item is
-    inserted first and thus will be removed last as well. 
+    """Queue implemented with my doubly linked list class.
     
-    '''
+    Attributes:
+        queue: A Doubly instance that simulates the queue.
+    """
     
     def __init__(self, loads=None):
+        """Inits an empty Queue by default. If loads is not None and 
+        non-empty, loads items into queue such that the first item in 
+        loads is the first that will be removed."""
         if loads is not None:
             self.queue = Doubly(loads)
         else:
             self.queue = Doubly()
-        
+     
+    def __len__(self):
+        return self.queue.size
+     
     def add(self, item):
+        """Adds an item in O(1) time."""
         self.queue.insert_head(item)
     
     def remove(self):
+        """Removes and returns the least-recently added item in O(1)
+        time. Returns None if queue is empty."""
         if not self.is_empty():
-            item = self.queue.tail.val
             return self.queue.remove_tail()
     
     def peek(self):
+        """Returns the least-recently added item in O(1) time. Returns 
+        None if queue is empty."""
         if not self.is_empty():
             return self.queue.tail.val
         
     def is_empty(self):
+        """Returns a Boolean."""
         return self.queue.size == 0
-
-from collections import deque
         
 class DequeQueue:
-    ''' Queue implemented with the optimized deque object. Will raise an 
-    exception on attempt to peek or remove while empty.
-    '''
+    """Queue implemented with the Python deque object. 
+    
+    Attributes:
+        queue: A deque object."""
     
     def __init__(self):
+        """Inits an empty DequeQueue."""
         self.queue = deque()
-        
-    def add(self, item):
+     
+    def __len__(self):
+        return len(self.queue)
+     
+    def add(self,item):
+        """Adds an item in O(1) time."""
         self.queue.appendleft(item)
     
     def remove(self):
+        """Removes and returns least-recently added item in O(1) time.
+        
+        Raises:
+            IndexError: queue is empty.
+        """
         return self.queue.pop()
         
     def peek(self):
+        """Returns least-recently added item in O(1) time.
+        
+        Raises:
+            IndexError: queue is empty.
+        """
         return self.queue[-1]
         
     def is_empty(self):
+        """Returns a Boolean."""
         return len(self.queue) == 0
-        
-    def __len__(self):
-        return len(self.queue)

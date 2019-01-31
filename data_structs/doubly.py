@@ -1,36 +1,44 @@
 class Doubly:
-    ''' Doubly-linked list class. 
-    '''
+    """Doubly linked list class with O(1) access to both head and tail.
     
-    # doubly linked list is made of individual nodes
+    Attributes:
+        head: A Node instance, or None.
+        tail: A Node instance, or None.
+        size: An int. Number of nodes in the list.
+    """
+    
     class Node:
+        """Building block class for doubly linked list."""
         
-        def __init__(self, value=None, next=None, prev=None):
-            if value is None:
-                self.val = None
-            else:
-                self.val = value
-            if next is None:
-                self.next = None
-            else:
-                self.next = next
-            if prev is None:
-                self.prev = None
-            else:
-                self.prev = prev
-                
-    # can be initialized to reference objects in a Python list, with the 
-    # first value of the list as the head
-    def __init__(self, values=None):
+        def __init__(self,value=None,next=None,prev=None):
+            """Inits Node with optional next, prev nodes and value."""
+            self.val = value
+            self.next = next
+            self.prev = prev
+            
+    def __init__(self,values=None):
+        """Inits empty Doubly by default, or loads with values.
+        
+        Args:
+            values: A list of initial values to be stored at Nodes. If 
+              not None and non-empty, will be inserted such that the 
+              values' order is maintained (item at index 0 will be 
+              head, item at index -1 tail.)
+        """ 
         self.head = None
         self.tail = None
         self.size = 0
         if values is not None:
-            while len(values) > 0:
-                self.insert_head(values.pop())
+            for value in values:
+                self.insert_tail(value)
     
-    # print the values of the nodes in order
+    def is_empty(self):
+        """Returns a Boolean."""
+        return self.head is None
+    
     def display(self):
+        """Prints the values at Nodes head to tail in O(N) time. Does 
+        not terminate if the list is circular."""
         if self.head is None:
             print("List is empty.")
         else:
@@ -40,9 +48,13 @@ class Doubly:
                 n = n.next
             print('|| ({0} items)'.format(self.size))
     
-    # insert a node with a given value at the head
-    def insert_head(self, value):
-        new_head = self.Node(value, self.head, None)
+    def insert_head(self,value):
+        """Inserts a Node with value at the head in O(1) time.
+        
+        Returns:
+            The new head Node instance.
+        """
+        new_head = self.Node(value,self.head,None)
         if self.head is not None:
             self.head.prev = new_head
         else:
@@ -51,9 +63,13 @@ class Doubly:
         self.size += 1
         return new_head
         
-    # insert a node with a given value at the tail
-    def insert_tail(self, value):        
-        new_tail = self.Node(value, None, self.tail)
+    def insert_tail(self,value):        
+        """Inserts a Node with value at the tail in O(1) time.
+        
+        Returns:
+            The new tail Node instance.
+        """
+        new_tail = self.Node(value,None,self.tail)
         if self.tail is not None:
             self.tail.next = new_tail
         else:
@@ -61,42 +77,40 @@ class Doubly:
         self.tail = new_tail
         self.size +=1
         return new_tail
-        
-    # remove the node at the tail
+            
     def remove_tail(self):
+        """Removes tail Node and returns value there in O(1) time. If 
+        list is empty, returns None."""
         if self.tail is None:
             return None
-        
+            
         self.size -= 1
-        return_val = self.tail.val
-        
+        return_val = self.tail.val 
         if self.tail is self.head:
             self.head, self.tail = None, None
-        
         else:
             new_tail = self.tail.prev
             new_tail.next = None
-            self.tail = new_tail
-        
+            self.tail = new_tail     
         return return_val
     
-    # move a node from its current position to the head
     def move_to_head(self,node):
-    
-        # make changes only if node is not already head
+        """Moves Node from current position to head in O(1) time."""
         if node.prev is not None:
             
-            # if node is tail but not head, then prev is new tail
+            # If node is tail but not head, then the linked list's tail
+            # must be reassigned. Otherwise, "skip" node moving from 
+            # tail to head.
+            
             if node.next is None:
                 self.tail = node.prev
             else:
                 node.next.prev = node.prev
                 
-            # regardless, make sure node is now skipped
-            node.prev.next = node.next
-            node.prev = None
+            # "Skip" node moving from head to tail, and set at head.
             
-            # update node so it is at head now, and update head
+            node.prev.next = node.next
+            node.prev = None      
             node.next = self.head
             node.next.prev = node
             self.head = node

@@ -1,32 +1,37 @@
 class Singly:
-    ''' Singly-linked list class. 
-    '''
+    """Singly-linked list class with O(1) access to head.
     
-    # singly linked list is made of individual nodes
+    Attributes:
+        head: A Node instance, or None.
+        size: An int. Number of nodes in the list.
+    """
+
     class Node:
+        """Building block class for singly linked list."""
         
-        def __init__(self, value=None, next=None):
-            if value is None:
-                self.val = None
-            else:
-                self.val = value
-            if next is None:
-                self.next = None
-            else:
-                self.next = next
+        def __init__(self,value=None,next=None):
+            """Inits Node with optional next nodes and value."""
+            self.val = value
+            self.next = next
     
-    # can be constructed to have the values of a Python list, with the first 
-    # value of the list as the head
-    def __init__(self, values=None):
+    def __init__(self,values=None):
+        """Inits empty Doubly by default, or loads with values.
+        
+        Args:
+            values: A list of initial values to be stored at Nodes. If 
+              not None and non-empty, will be inserted such that the 
+              values' order is maintained (item at index 0 will be 
+              head, item at index -1 tail.)
+        """
         self.head = None
         self.size = 0
         if values is not None:
-            while len(values) > 0:
-                self.insert_head(values.pop())
+            for i in range(len(values)-1,-1,-1):
+                self.insert_head(values[i])
     
-    # print the values of the nodes in order. does not terminate if the list
-    # is circular
     def display(self):
+        """Prints the values at Nodes head to tail in O(N) time. Does 
+        not terminate if the list is circular."""
         if self.head is None:
             print("List is empty.")
         else:
@@ -36,57 +41,71 @@ class Singly:
                 n = n.next
             print('|| ({0} items)'.format(self.size))
     
-    # insert a node with a given value at the head
-    def insert_head(self, value):
+    def insert_head(self,value):
+        """Inserts a Node with value at the head in O(1) time.
+        
+        Returns:
+            The new head Node instance.
+        """
         new_head = self.Node(value, self.head)
         self.head = new_head
         self.size += 1
         return self
 
-    # check if empty
     def is_empty(self):
+        """Returns a Boolean."""
         return self.head is None
         
-    # if not empty, remove the head and return it
     def remove_head(self):
+        """Removes head Node and returns value there in O(1) time. If 
+        list is empty, returns None."""
         if not self.head is None:
             old_head = self.head
             self.head = self.head.next
             self.size -= 1
             return old_head.val
         
-    # insert a node with a given value at the tail
     def insert_tail(self, value):
-        new = self.Node(value, None)
+        """Inserts a Node with value at the tail in O(N) time.
         
-		# case where list is empty
+        Returns:
+            The new tail Node instance.
+        """
+        new = self.Node(value, None)
         cur = self.head
+              
+        # On an empty list, the tail is the head.
+              
         if cur is None:
             self.head = new
             self.size += 1
-            return
+            return new
         
-		# otherwise, traverse until at end
+        # Otherwise, traverse the full list to the tail.
+        
         while cur.next is not None:
             cur = cur.next
         cur.next = new
         self.size += 1
+        return new 
         
-    # delete the first node in the list with a 
-    # given value, and makes no change if no such node exists
-    # runs in O(n) time worst-case as it must traverse the entire list 
-    def delete(self, value):
+    def delete_one(self, value):
+        """Deletes the node closest to the head of the list with a 
+        given value, and makes no change if no such node exists. Runs
+        in O(N) time worst case as it must traverse the entire list.""" 
         if self.size == 0:
             return
         
-        # check if value is at head
+        # Delete and return immediately if first node matches value.
+        
         cur = self.head
         if cur.val == value:
             self.head = cur.next
             self.size -= 1
             return
         
-        # otherwise, look through rest of list
+        # Otherwise, traverse entire list.
+        
         while cur.next is not None:
             if cur.next.val == value:
                 cur.next = cur.next.next
