@@ -2,6 +2,12 @@ import sys
 sys.path.append('..')
 from data_structs import Stack, DequeQueue, Graph
 
+# p04
+
+# Graph Tests: Some searches over my Graph class.
+
+##############################################################################
+
 # My BFS and DFS test functions arbitrarily set the 0th-indexed node as the
 # "root" from which to begin searching. If the graph is not connected, then 
 # this search function will not print any nodes unconnected to that node.
@@ -309,8 +315,8 @@ def get_path(graph,from_s,from_t):
    
 # Below I define the undirected graph from page 109 in CCI6, with the node 
 # labeled "s" at index 0, and "t" at index 46. There is also a photo of my 
-# drawing of the graph in this directory, at "graph_sample.jpg". There are 61 
-# total nodes, with the node at 60 (not drawn) unconnected to all the others. 
+# drawing of the graph in this directory, at "p04.jpg". There are 61 total
+# nodes, with the node at 60 (not drawn) unconnected to all the others. 
 
 graph_b = Graph()
 for i in range(61):

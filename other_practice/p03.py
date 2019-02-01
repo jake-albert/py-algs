@@ -3,6 +3,12 @@ sys.path.append('..')
 from data_structs import MaxHeap, MinHeap, MyMaxHeap, MyMinHeap
 from random import randint
 
+# p03
+
+# Heap Tests: Some tests on the heap implementations.
+
+##############################################################################
+
 # One way to test a heap's performance is to insert random integers into it 
 # and confirm that they get popped off back in sorted order.
 
