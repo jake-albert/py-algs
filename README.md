@@ -1,13 +1,13 @@
 # py-algs  
 Author: Jake Albert  
-Comprehensive review of algorithms and data structures written and tested on Python 3.7.0.  
+Comprehensive review of algorithms and data structures written and tested in Python 3.7.0.  
 Designed for side-by-side viewing of source code and testing in interactive mode.   
 
 Acknowledgement: Majority of practice problems sourced from *Cracking the Coding Interview, 6th Edition* ("CCI6") by Gayle Laakman McDowell.
 
 Directory map:  
   * The "data_structs" directory acts as a Python package. It holds my implementations of data structures such as binary search trees, linked lists, tries, etc.
-  * The "other_problems" directory holds miscellaneous algorithms problems not from CCI6. They are ordered arbitrarily.
+  * The "other_practice" directory holds miscellaneous algorithms problems not from CCI6. They are ordered arbitrarily.
   * Any directory of the form "c{x}" holds my discussion of and solutions to problems from the x-th chapter of CCI6. Filenames in these directories are of the form "c{x}p{y}.py", where y is the number of the problem in that chapter.
 
 Usage:  
