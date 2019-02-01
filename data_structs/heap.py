@@ -1,6 +1,5 @@
 import heapq as hq
 from operator import le, ge
-from random import randint
 
 # A heap can be implemented in Python using the heapq library, which can 
 # "heapify" any Python list of values that can be compared and ordered. The
@@ -14,7 +13,7 @@ def heapq_examples():
     hq.heappush(mylist,22)
     hq.heappush(mylist,7)
     print(mylist[0])                 # Reveals top of heap, as 5.
-    hq.heappop(mylist)            # Pops off 5 and now top is 7.
+    hq.heappop(mylist)               # Pops off 5 and now top is 7.
     print(mylist[0])                 # 7.
 
 # I used the heapq library to implement a min-heap and max-heap class, making 
@@ -204,37 +203,4 @@ class MyMaxHeap(MyHeap):
 
     def __init__(self):
         """Inits an empty MyMaxHeap."""
-        super(MyMaxHeap,self).__init__(ge) 
-
-# One way to test a heap's performance is to insert random integers into it 
-# and confirm that they get popped off back in sorted order.
-
-def test():
-    """Tests the push and pop methods for the heap classes."""
-    test_heap(MaxHeap,True)
-    test_heap(MinHeap,False)
-    test_heap(MyMaxHeap,True)
-    test_heap(MyMinHeap,False)
-    
-     
-def test_heap(heap_class,max_test):
-    """Tests the push and pop methods for a single heap class.
-    
-    Args:
-        heap_class: A callable class that creates a heap.
-        max_test: True if testing for max heap, False for min heap.
-    """
-    NVALS = 1000
-    MIN_VAL = 1
-    MAX_VAL = 1000
-
-    h = heap_class()
-    vals = [randint(MIN_VAL,MAX_VAL) for _ in range(NVALS)]
-    for val in vals:
-        h.push(val)
-        
-    my_sorted_vals = []
-    while not h.is_empty():
-        my_sorted_vals.append(h.pop())
-     
-    assert my_sorted_vals == sorted(vals,reverse=max_test)
+        super(MyMaxHeap,self).__init__(ge)

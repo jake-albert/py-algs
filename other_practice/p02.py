@@ -1,6 +1,7 @@
 # p02
 
-# An exercise in recursion and combinatorics thought up by my friend Ben. 
+# Funky Sudoku: An exercise in recursion and combinatorics thought up by my
+# friend Ben. 
 #
 # Consider a 3x3 grid. Each cell is filled with a single digit, 1-9 (no 
 # zeroes), but the digits must obey certain rules. For example:

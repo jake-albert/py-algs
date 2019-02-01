@@ -9,3 +9,5 @@ from .heap import MinHeap
 from .heap import MaxHeap
 from .heap import MyMinHeap
 from .heap import MyMaxHeap
+
+from .graph import Graph

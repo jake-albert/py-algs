@@ -1,6 +1,6 @@
 # p01
 
-# A problem shared with me by my friend Andrew. 
+# Longest Straight: A problem shared with me by my friend Andrew. 
 #
 # Return the length of the longest consecutive sequence of integers that could
 # be formed by picking values from an unsorted list. For example, if the input
