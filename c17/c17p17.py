@@ -21,9 +21,9 @@ from data_structs import Trie, DequeQueue
 # strings T is ["llama", "llamas", "type","animal", and "im"], my solution 
 # outputs the list [(0,4),(0,5),(15,16),(18,21),(28,29),(26,31)]. This format 
 # does not categorize hits by the string in T that they match, though I
-# suppose I could include this information easily if preferred. The order of
-# the tuples is also not specified in the problem, so I assume that any order 
-# is fine. My solution returns hits in increasing order by the END index. 
+# suppose I could include this information if preferred. The order of the 
+# tuples is also not specified in the problem, so I assume that any order is 
+# fine. My solution returns hits in increasing order by the END index. 
 
 # Like with many string/matching based problems, I used a trie to store all of
 # the strings in T that we must search for. We "look at" each character in b 
@@ -92,6 +92,8 @@ def f1(b,T):
     if len(T) == 0:
         return []
     
+    # Strings in T longer than b cannot possibly be in b, so ignore.
+    
     trie = Trie()
     for word in T:
         if len(word) > 0 and len(word) <= len(b):
@@ -128,7 +130,8 @@ def f1(b,T):
     return output
         
 def test():
-    """Tests some sample inputs."""
+    """Tests some sample inputs. Could also write a brute-force search
+    to check correctness more rigorously."""
     bT_pairs = [("abcde",["a","ab","abc","abcd","abcde"]),
                 
                 ("abcde",["abcde","bcde","cde","de","e"]),
