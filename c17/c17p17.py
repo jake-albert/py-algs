@@ -30,23 +30,23 @@ from data_structs import Trie, DequeQueue
 # once, and if the character matches the beginning of what could be a word
 # (that is, if that character maps to a child to the root of the trie), then
 # we keep track of that node and attempt to continue traveling down the trie 
-# from that node as we look at subsequent characters in b, making sure to stop 
-# tracking that path if we discover that it cannot lead to a string in T.
+# from that node as we look at subsequent characters in b. We make sure to
+# stop tracking that path if we discover that it cannot lead to a string in T.
 
 # The time to insert every string from T into the trie is O(c(T)), where c(T)
 # is the total number of characters in all of the strings in T.
 
 # Since we will never have more nodes to track at any one time than there are 
-# strings in in T, one generous bound for the runtime of the second part of 
+# strings in in T, one (generous) bound for the runtime of the second part of 
 # the function is in O(B*N), where B is the number of characters in string b 
 # and N is the number of strings in T. 
 
 # When there are many strings in T, so N is very large large, but each of the
-# strings in T is less than N in the number of characters its has, there is a 
-# better bound in O(B*L), where L is the length of the longest string in T.
-# This is because all node trackers will "time out" within at most L steps 
-# through b, and since each new one begins after each step, no more than L 
-# must be checked at each character in b.
+# strings in T has fewer than N characters, there is a better bound of O(B*L),
+# where L is the length of the longest string in T. This is because all node
+# trackers will "time out" within at most L steps through b, and since each 
+# new step adds no more than 1 new tracker, no more than L must be checked at
+# each any one step through b.
 
 # While this does not improve asymptotic performance, on certain inputs we 
 # can see that this approach works efficiently with multiple words in T that 
@@ -94,8 +94,14 @@ def f1(b,T):
     
     trie = Trie()
     for word in T:
-        if len(word) > 0:
+        if len(word) > 0 and len(word) <= len(b):
             trie.insert(word)
+    
+    # Prefixes to possible hits are kept on a queue is updated on each
+    # new character. For example, if T is ["abcd","car"] and b "abcd", 
+    # then after checking the character "c" in "abcd", the queue holds 
+    # two references to nodes in the trie: the "c" below the "b" below 
+    # "a" below the root, and, and then the "c" below the root.
     
     prefixes = DequeQueue()
     output = []
@@ -103,7 +109,7 @@ def f1(b,T):
     for i in range(len(b)):
     
         prefixes.add(trie.root)
-        prefix_num = len(prefixes)  # Queue length will change! 
+        prefix_num = len(prefixes)  # Q length changes, so store! 
         for _ in range(prefix_num):  
         
             node = prefixes.remove()
