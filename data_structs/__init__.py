@@ -11,3 +11,5 @@ from .heap import MyMinHeap
 from .heap import MyMaxHeap
 
 from .graph import Graph
+
+from .trie import Trie
