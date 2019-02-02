@@ -4,7 +4,7 @@ from data_structs import Stack, DequeQueue, Graph
 
 # p04
 
-# Graph Tests: Some searches over my Graph class.
+# Graph Searches: Some searches over my Graph class.
 
 ##############################################################################
 

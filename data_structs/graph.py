@@ -39,6 +39,10 @@ class Graph:
         """Returns a Node by standard Python indexing syntax."""
         return self.nodes[index]
     
+    def has_node(self,index):
+        """Returns True iff a node with index exists in graph."""
+        return index > 0 and index < len(self.nodes)
+    
     def add_node(self,children=None,data=None):
         """Creates a Node and returns its index.
         
