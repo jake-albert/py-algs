@@ -25,7 +25,7 @@ from data_structs import Trie, DequeQueue
 # tuples is also not specified in the problem, so I assume that any order is 
 # fine. My solution returns hits in increasing order by the END index. 
 
-# Like with many string/matching based problems, I used a trie to store all of
+# Like with many string/matching-based problems, I used a trie to store all of
 # the strings in T that we must search for. We "look at" each character in b 
 # once, and if the character matches the beginning of what could be a word
 # (that is, if that character maps to a child to the root of the trie), then

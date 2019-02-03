@@ -20,10 +20,10 @@ from data_structs import Trie
 
 ##############################################################################
 
-# There are some important clarification questions. First, is there any 
-# meaning to an empty string in the input dictionary? A trivial "match" to an
-# empty string does not change the number of unrecognized characters and 
-# seems like a waste of time. I simply ignore any such strings in the input.
+# There are some important things to clarify. First, is there any meaning to
+# an empty string in the input dictionary? A trivial "match" to an empty 
+# string does not change the number of unrecognized characters and seems like
+# a waste of time. I simply ignore any such strings in the input.
 
 # Another question is of the format of the document string. Are newlines 
 # between different lines part of the "punctuation" that was removed, or are
