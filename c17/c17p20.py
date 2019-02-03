@@ -26,7 +26,7 @@ from random import randint
 # insertion that adds a newly randomly generated number, and a get_median that
 # returns a median. How efficiently can we do both?
  
-# A naive but straighforward option is to keep a linked list of items, then 
+# A naive but straightforward option is to keep a linked list of items, then 
 # insert a new node in the proper, sorted spot for each new number in O(N) 
 # time in the worst case, and then keep track of the "middle" node or two
 # nodes so as to be able to return the median in O(1) time. 
@@ -62,7 +62,7 @@ from random import randint
 # after, so we need to keep track of all of them which suggests that we cannot
 # beat O(N) memory. 
        
-# The below implementaion differs slightly from the above description in that 
+# The below implementation differs slightly from the above description in that 
 # it keeps the two heaps at the same size at all times, storing the median 
 # value when there is an odd total in a separate attribute called "mid". This 
 # design makes for far cleaner code than when there is no "mid", but it is 
@@ -140,11 +140,11 @@ class MedianKeeper:
             takes_m.push(self.mid)
             self.mid = None
     
-# I test for correctness using an even more straighforward (and slow) solution
-# than even the naive solution offered above: maintain a list of numbers, and
-# upon each insertion append that number to the end and sort the entire list.
-# This requires O(NlogN) time per insertion and would not be wise to use for 
-# large sets of numbers, but it is simple to write up. 
+# I test for correctness using an even more straightforward (and slow) 
+# solution than even the naive solution offered above: maintain a list of
+# numbers, and upon each insertion append that number to the end and sort the
+# entire list. This requires O(NlogN) time per insertion and would not be wise
+# to use for large sets of numbers, but it is simple to write up. 
     
 class SlowMedianKeeper:
     """Inefficient but guaranteed correct MedianKeeper class.

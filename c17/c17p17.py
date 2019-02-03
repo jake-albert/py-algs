@@ -52,7 +52,7 @@ from data_structs import Trie, DequeQueue
 # can see that this approach works efficiently with multiple words in T that 
 # begin with the same prefix of characters. This is because we track only ONE 
 # node as we verify them. For example, if the words in T are "dog" and 
-# "dogstand" then we need only one tracker to verfiy the characters "d","o",
+# "dogstand" then we need only one tracker to verify the characters "d","o",
 # and "g" for both words in "the dogsitter bought my dog a dogstand." At each
 # "g", we recognize that a word has been found at add that hit to the output, 
 # but maintain the tracker as it searches for "dogstand".
