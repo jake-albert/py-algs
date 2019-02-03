@@ -61,18 +61,18 @@ from random import randint
        
 # In order to truly replicate the behavior of the Python interpreter, it is 
 # important that we greedily compute operations from left to right whenever 
-# possible, rather than perform these operatioins in a different order, even 
+# possible, rather than perform these operations in a different order, even 
 # though the fractional value of the result would not change (above, 2139/59).
 
 # Alternatively, we could store a running tab of the result to return using 
-# Pyhon's Fraction class, and then only at the end output a decimal form. In 
+# Python's Fraction class, and then only at the end output a decimal form. In 
 # that case, the relative order of multiplications and divisions would not 
-# make a difference. (This appraoch might also be faster, as we would avoid 
+# make a difference. (This approach might also be faster, as we would avoid 
 # floating-point arithmetic until the end? I would have to look more into how
 # the Fraction class implements its operations.)
        
 def f1(exp):
-    """Given a string representing an artihmetic expression of positive
+    """Given a string representing an arithmetic expression of positive
     integers, computes and prints the result.
     
     Args:
@@ -113,7 +113,7 @@ def f1(exp):
         # We aim to calculate (out op arg) as soon as we possibly can.
         # When op is * or /, we can do this immediately and "shift" op,
         # arg, and nop to the right. But when op is + -, we must first 
-        # compute ALL consecutive * or / operatioins from nop to the  
+        # compute ALL consecutive * or / operations from nop to the  
         # right, which might include the final operation in the string.
         
         if (op is add) or (op is sub):
@@ -207,9 +207,9 @@ def test(max_ops,trials,max_int):
                 print("f2 issue:",str)
     
 def generate_input(c,max_int):
-    """Returns a string represnting an arithmetic expression with c 
+    """Returns a string representing an arithmetic expression with c 
     random integers from 1 to max_int (inclusive), and c-1 operations 
-    randomly selected from plus, minus, muliply, and divide.
+    randomly selected from plus, minus, multiply, and divide.
     """
     ops = ["+", "-", "*", "/"]
 
