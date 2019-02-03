@@ -95,7 +95,7 @@ def find_intersection(ls_a,ls_b):
             return None
     
     # If NEITHER line segment is vertical, then either they are on 
-    # different lines, indicating that they have one intersetion point,
+    # different lines, indicating that they have one intersection point
     # or that they are on the same line.    
     
     else:

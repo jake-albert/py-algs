@@ -22,11 +22,11 @@ from random import randint
 # be expected to run faster because it on average does less work per integer.
 
 # The first approach treats the input list as a sequence of "globs", or 
-# maximally long continguous sequences, of negative and non-neg integers. For
+# maximally long contiguous sequences, of negative and non-neg integers. For
 # example, the example array can be though of as an empty negative glob,
 # followed by a non-neg glob with 2, then a negative glob with -8, and so on.
 # An array like [-5,-6,1,-10,-8,3,-5,-9,2] begins with a negative glob of -5 
-# and -6. Otherwise, the maximum sum must be the result of summming over a 
+# and -6. Otherwise, the maximum sum must be the result of summing over a 
 # sub-list that takes the form:
 
 # NON-NEGATIVE_GLOB (NEGATIVE_GLOB NON-NEGATIVE_GLOB)*
@@ -75,7 +75,7 @@ def f1(lst):
     
     # For every non-negative glob that is not the first, the maximum sum 
     # that ENDS with it is either the sum from that glob alone, or the 
-    # sum of that glob, the preceeding negative glob, and the maximum 
+    # sum of that glob, the preceding negative glob, and the maximum 
     # sum that ends at the previous glob. One of these maximum sums is 
     # the global maximum. 
     
@@ -116,7 +116,7 @@ def get_glob(i,lst):
     return i, sum
     
 # The second approach uses similar inductive logic as above but at the ELEMENT
-# level as opposed to the GLOB level. The contigous sequence with maximum sum
+# level as opposed to the GLOB level. The contiguous sequence with maximum sum
 # is also the best contiguous sequence of all the sequences that end at some 
 # index x. As a base case, the sum of the best contiguous sequence that ends 
 # at index 0 is simply the value at index 0. For all other indices x, it is 

@@ -124,7 +124,7 @@ def increment_counter(dictionary,key):
 class Change:
     """Small class representing population change in one year.
     
-    Atrributes: 
+    Attributes: 
         births, deaths: Non-negative ints.
     """
     

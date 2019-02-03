@@ -50,7 +50,7 @@ from operator import lt, gt
 # turns out, this makes for simpler simulation of the grid because of the data
 # structure I chose to use for the problem.)
 
-# Rather than maintian a matrix, whose boundaries I would need to expand
+# Rather than maintain a matrix, whose boundaries I would need to expand
 # whenever the ant steps beyond its initial size, I chose to maintain a SET of
 # squares that are black. This means that, with my above assumption about the 
 # initial state of the grid, I can initialize the board as an empty set. 
@@ -65,7 +65,7 @@ from operator import lt, gt
 # As for printing the board, I chose to keep track of the farthest up, down, 
 # right, and left that the ant has traveled, find the maximum of these values, 
 # double it, add one for padding to create a value D, and then draw a square 
-# cenetered at (0,0) with side length D. We can then either build and then 
+# centered at (0,0) with side length D. We can then either build and then 
 # join a list of characters to form a string to print, or write a function 
 # that without storing a full string to represent the output, prints each 
 # character in the grid top-left to bottom-right. Either way, this should take
@@ -93,7 +93,7 @@ from operator import lt, gt
 class Ant:
     """A representation of an ant's current position and direction.
     
-    Atrributes:
+    Attributes:
         x: An int. The ant's x-axis position.
         y: An int. The ant's y-axis position.
         dx: An int. 1 when ant faces right, -1 when left, 0 otherwise.
@@ -219,7 +219,7 @@ class Grid:
     
     def _update_bounds(self):
         """Determines if the the ant is the farthest has traveled in
-        any direction. Asumes that the ant has not rotated since last
+        any direction. Assumes that the ant has not rotated since last
         taking a step.
         """
         if self.ant.facing_horizontal():

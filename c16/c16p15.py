@@ -80,7 +80,7 @@ def f1(guess,solut):
             mismatch_counter[s][1] += 1
   
     # The total number of pseudo-hits for any given character is the 
-    # MINIMUM of the mismatches of that character in the guess srting, 
+    # MINIMUM of the mismatches of that character in the guess string, 
     # and the mismatches of that character in the solution string. Sum
     # over these values for each character to find total pseudo-hits.
         
@@ -91,7 +91,7 @@ def f1(guess,solut):
     
 def test(n):
     """Produces output for n randomly generated guess-solution pairs. 
-    Correctness may be cheked by hand.
+    Correctness may be checked by hand.
     
     Args:
         n: An int number of times to call the function.

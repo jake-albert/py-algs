@@ -53,7 +53,7 @@ def f1(n):
     three_stack = Stack()
     group = -1
     
-    # Divide n into "groups" of three digits: the pre-thouands, then 
+    # Divide n into "groups" of three digits: the pre-thousands, then 
     # thousands, then millions, billions, and so on. For each group, 
     # generate a string such as "Two Hundred Twelve" and push onto a
     # stack s.t. groups with greater significance will be output first.   
@@ -115,7 +115,7 @@ def print_output(output_stack,neg,group):
     """Prints an English phrase that describes an integer.
     
     Args:
-        output_stack: A Stack inistance loaded with strings of 3-digit 
+        output_stack: A Stack instance loaded with strings of 3-digit 
           groups, with the most significant group at the top.
         neg: A Boolean. True if negative, False otherwise.
         group: An int representing the highest "group" (thousands,

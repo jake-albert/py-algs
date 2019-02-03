@@ -17,9 +17,9 @@
 # Let's say that the input is in the form (p, s), where p is a point on the 2D
 # plane and s is a positive number representing the side length. 
 
-# We actually do not even need to know the side legnth. A line that runs 
+# We actually do not even need to know the side length. A line that runs 
 # through the center of both squares can be demonstrated to cut both squares
-# into equal halves. These two halves are either isoceles triangles, or
+# into equal halves. These two halves are either isosceles triangles, or
 # trapezoids, and the areas and other dimensions of both can be shown to have
 # the same dimensions, area etc.
 
@@ -31,7 +31,7 @@
 # has a unique representation as a Line object.
 
 # Because the signature values are floats that result from division, I needed
-# to define equivalency between two lines, and two approaches seemed possible. 
+# to define equivalence between two lines, and two approaches seemed possible. 
 # One was that any two lines whose signature values are within some absolute 
 # or relative threshold of each other are defined to be equivalent. As an 
 # example of an absolute threshold: "If the values are within 0.00001 of each
@@ -41,7 +41,7 @@
 # or truncate immediately to a specific place, and then compare and hash the
 # values as normal. The two approaches lead to different interpretations. For
 # instance, say m1 is 4.568 and m2 is 4.572. With an absolute threshold of
-# 0.005, then m1 and m2 are "wihtin range" of each other and thus would be
+# 0.005, then m1 and m2 are "within range" of each other and thus would be
 # considered equivalent, but if they are truncated to the hundredths place 
 # then this would not be the case. (4.56 and 4.57). Of course, rounding 
 # results in different results. (4.562 and 4.566, for example.)
@@ -127,7 +127,7 @@ def f1(sq1,sq2):
     # The centers of the two squares might be identical. If so, we may 
     # return any line that goes through this point. We choose a 
     # horizontal line. (We also could have chosen a vertical line like
-    # below, elminating a step.)
+    # below, eliminating a step.)
     
     if x1 == x2 and y1 == y2:
         print(Line(1,0,y1))

@@ -109,7 +109,7 @@ def my_floordiv(a,b):
     
     # Ensure that pos is False iff only one of a or b is negative. 
     # this Boolean preserves the only information about sign that we 
-    # need, so for simpler arithmatic we ensure that a and b are equal
+    # need, so for simpler arithmetic we ensure that a and b are equal
     # to their absolute values.
     
     pos = True
@@ -137,7 +137,7 @@ def my_floordiv(a,b):
     
     # When pos is False and there is an even division (ex. -8 // 2),
     # return simply the negated value of cur (4 -> -4). In all other 
-    # cases where pos is Fasle (ex. -8 // 3), account for the negative
+    # cases where pos is False (ex. -8 // 3), account for the negative
     # floor by adding one to cur before negating (2 -> -3).
     
     if pos:

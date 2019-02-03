@@ -22,13 +22,13 @@
 # simplicity, I chose to reject any such inputs and raise an exception.
 
 # The first approach uses a specially-designed Trie that stores words 
-# acccording to their T9 encoding. Words with the same encoding are stored in
+# according to their T9 encoding. Words with the same encoding are stored in
 # arbitrary order, as the problem does not specify any preferred output order.
 # The trie has a benefit of allowing us to exit early if we have a sequence 
 # prefix that cannot possibly lead to a stored word.
 
 # Inserting a new word from a list, and retrieving the list of words for an 
-# input sequence, both run in O(N) time, where n is the legnth of the word or
+# input sequence, both run in O(N) time, where n is the length of the word or
 # pattern being retrieved. If we expect to be working with English words whose 
 # length is generally less than 20 characters, or if we are working with some 
 # other class of strings with a maximum length, then we could argue that this 
@@ -116,7 +116,7 @@ class T9TrieNode:
         
     def _retrieve(self,seq,i):
         """Recursively traces through to the node representing 
-        the ith digit of the sequnce, or returns that there is 
+        the ith digit of the sequence, or returns that there is 
         no such path, indicating that no words match.
         
         Raises:

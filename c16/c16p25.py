@@ -21,7 +21,7 @@ from data_structs import Doubly
 # hash table so that the hash table's size remains capped at max size as well.
 
 # I had to decide how to handle a case of inserting a key-value pair whose key
-# alrady exists in the cache. I chose that this cache simpy reassigns the
+# already exists in the cache. I chose that this cache simply reassigns the
 # value, but also that this counts as a "use" just like retrieval and thus 
 # results in the item being placed at the head of the doubly-linked list.
 
@@ -36,7 +36,7 @@ class MyCache:
     """
 
     def __init__(self,maxsize):
-        """Inits empty MyCache instance. Maxsize specified by user."""
+        """Inits empty MyCache instance. maxsize specified by user."""
         self.size = 0
         self.maxsize = maxsize
         self.chain = Doubly()

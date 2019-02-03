@@ -23,20 +23,20 @@ from random import shuffle
 
 # To find the left index, we must find the leftmost index whose value is
 # greater than some value to the right. In a list that is already sorted 
-# (regardless of whetehr or not that list has duplicates) no such index exists
+# (regardless of whether or not that list has duplicates) no such index exists
 # and this case must be detected. Ex. in [1,3,3,4,5,8,8,9], the value at every 
 # index is less than or equal to every value to the right (this is what it
 # means, in fact, to be "in order".) On the other hand, in the example input 
 # list, [1,2,4,7,10,11,7,12,6,7,16,18,19], while both indices 6 and 7 have 
 # values (7 and 12) that are greater than at least one value to their right, 
 # the LEFTMOST index with this property is index 3 (value 7), and this marks 
-# the left edge of the subarray that must be reordered. 
+# the left edge of the sub-array that must be reordered. 
 
 # Important is to note that this definition works on inputs with duplicate 
 # values at the boundary. In [1,2,4,6,6,6,7,6,20], the indices 4, 5, and 6
 # hold values that are greater than or equal to some value to their right, but 
 # index 7 is the left-most index with a value strictly greater than a value to
-# the right, and this marks the correct index for the shortest subarray that
+# the right, and this marks the correct index for the shortest sub-array that
 # must be sorted.
 
 # The right index simply the rightmost index whose value is less than some
@@ -44,7 +44,7 @@ from random import shuffle
 # to save a bit of time in doing this. 
 
 def f1(lst):
-    """Returns the indices to the shortest subarray that, if sorted, 
+    """Returns the indices to the shortest sub-array that, if sorted, 
     would result in the entire input list being sorted.
     
     Args:
@@ -121,7 +121,7 @@ def get_right_index(lst):
     
 def generate_extremes_list(lst,mins):
     """When mins is True, generates and returns a list of running 
-    miniima from the right end of the input list. Otherwise, generates
+    minima from the right end of the input list. Otherwise, generates
     and returns a list of running maxima from the left end of the input
     list.
 
@@ -217,7 +217,7 @@ def get_right_index_2(lst,start):
     
     Args:
         lst: A list of integers.
-        srart: An integer representing the index to begin searching.
+        start: An integer representing the index to begin searching.
         
     Returns:
         An integer index.
@@ -240,7 +240,7 @@ def get_right_index_2(lst,start):
 # not necessarily that they are correct. 
     
 def test(n,leng):
-    """Tests randomized inputs for equivalency between f1 and f2.
+    """Tests randomized inputs for equivalence between f1 and f2.
     
     Generates a random shuffled list with values from 0 to i-1, and 
     duplicate values from 0 to i//2-1, n times for every i from 0 to 

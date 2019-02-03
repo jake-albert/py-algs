@@ -142,18 +142,18 @@ def check_diagonals(board,n):
 
 # The above approach requires more checks of individual squares than is 
 # necessary. The below approach, f2, visits each square only once and then
-# increments a counter of each symbol for the correpsonding rows, columns,
+# increments a counter of each symbol for the corresponding rows, columns,
 # and diagonals.
 
 # Given that this approach requires O(N) memory to store counters for each 
-# of the rows, columns, and diagonals, there is a bit of a tradeoff. In 
+# of the rows, columns, and diagonals, there is a bit of a trade-off. In 
 # addition, the "work" done at each visit to a square, which involves finding 
 # all of the rows, column, and diagonals in which it belongs and updating 
 # them, is greater than that done at each square in f1, so it is not 
 # immediately obvious that f2 should have constant-factor improvements to 
 # runtime.
         
-# Perhaps with some added optimzations, such as if the function were to keep
+# Perhaps with some added optimizations, such as if the function were to keep
 # track (at a greater memory cost) of which zones are still "in the running" 
 # to be won, and systematically "rule out" ones with blank spaces or with at 
 # least one of each an X and an O, then it could improve runtime more.

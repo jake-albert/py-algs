@@ -14,7 +14,7 @@ from c16p13 import Line
 # line. These values will be either 1,3,6,10, or other values that are 
 # "triangle numbers": sums of consecutive integers beginning at 1.
 
-# Ex. for a line that passses through 3 unique points a,b,c, there is the pair
+# Ex. for a line that passes through 3 unique points a,b,c, there is the pair
 # (a,b), the pair (b,c), and the pair (a,c) that each defines that line.
 
 # I assume for this problem that the input consists of unique points. Some 
@@ -97,12 +97,12 @@ def get_line(p1,p2):
 # define the same line, then we should NOT need to check bc, bd, be, cd, etc.
 
 # In a "worst-case" scenario in which no more than two points are EVER 
-# colinear for all pairs, this "optimzation" saves no time because we must 
+# co-linear for all pairs, this "optimization" saves no time because we must 
 # look at every single pair. Taking into account the added time cost of 
-# tracking colinear points, this would be slower performance than before.
+# tracking co-linear points, this would be slower performance than before.
 
 # In a "best-case" scenario where all input points lie along the same line, 
 # this optimization would be able to finish in O(N) time, but information
-# about how often this scenario or similar scenarios with many colinear points
-# are likely to happen can help inform whether implementing these checks would 
-# improve expected runtime over a typical input.
+# about how often this scenario or similar scenarios with many co-linear 
+# points are likely to happen can help inform whether implementing these 
+# checks would improve expected runtime over a typical input.
