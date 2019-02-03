@@ -68,10 +68,9 @@ from data_structs import Trie
 # with a space BEFORE it (or the length of doc if no more spaces are needed) 
 # should i be treated as the start of a word.
 
-# We populate this memo from "back" to "front", with the base case 
-
-# Assuming that if we have the values of OPT[j] already stored for all indices
-# i < j < len(doc), then OPT[i].count is equal to the MINIMUM of:
+# We populate this memo from "back" to "front". Assuming that if we have the 
+# values of OPT[j] already stored for all indices i < j < len(doc), then 
+# OPT[i].count is equal to the MINIMUM of:
 
 #     OPT[i+1].count + 1 (treat the character here as unrecognized)          
 #     min OPT[x+1].count, for all x that mark the end of a word starting at i
