@@ -40,7 +40,7 @@ class MaxHeap(MinHeap):
     def pop(self): return self.neg(hq.heappop(self.h))
     def replace(self,x): return self.neg(hq.heapreplace(self.h,self.neg(x)))
     
-# I also implemented a heap wihtout the heapq library using a Python list, 
+# I also implemented a heap without the heapq library using a Python list, 
 # making sure to implement not only push and pop, but replace as well.
 
 class MyHeap:
@@ -172,7 +172,7 @@ class MyHeap:
            
     def _send_down_top_val(self):
         """Successively swaps the value at the top of the heap to lower
-        levels until the heap peroperty is satisfied. Assumes that the
+        levels until the heap property is satisfied. Assumes that the
         heap satisfies the heap property except for its top value."""   
         index = 0    
         while self._has_left_child(index):
