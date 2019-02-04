@@ -67,15 +67,13 @@ def f1(points):
             
     print(max_line)
     return
-    
-# assume that p1 and p2 are different. Return the line that connects them    
+      
 def get_line(p1,p2):
     """Return the Line instance representing the line that passes 
-    through two different points.
+    through two points that are assumed to be different.
     
     Args:
-        p1: A tuple of floats.
-        p2: "                "
+        p1, p2: Tuples of floats.
 
     Returns:
         A Line object.
