@@ -1,5 +1,6 @@
 # py-algs  
 Author: Jake Albert  
+
 Comprehensive review of algorithms and data structures written and tested in Python 3.7.0.  
 Designed for side-by-side viewing of source code and testing in interactive mode.   
 
