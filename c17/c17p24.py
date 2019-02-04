@@ -117,7 +117,7 @@ class Output:
                f"Upper-left corner  : {self.UL}\n"      \
                f"Bottom-right corner: {self.BR}" 
 
-def f2(M):
+def f1(M):
     """Returns a submatrix with largest possible sum in O(N^3) time.
     
     Args:
@@ -240,7 +240,5 @@ def test(trials,d,minv,maxv):
             print(f"On trial {trial} of {trials}.")
     
         M = [[randint(minv,maxv) for _ in range(d)] for _ in range(d)]
-        
-        correct = f2(M)
-        check = f1(M)
-        assert check == correct
+
+        assert f1(M) == f2(M)
