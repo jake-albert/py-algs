@@ -115,7 +115,7 @@ def time_test():
 # patterns, which have three unique symbols and thus may be arranged into 6 
 # orderings. So the number of unique top rows is 9*1+16*6 = 105. 
 
-# Each row placed in the top placed different constraints on the possible rows
+# Each row placed in the top places different constraints on the possible rows
 # that can be below it; for instance, because there is no valid row/column
 # group containing 1 that also contains a 6, 8, or 9, "111" in the top row 
 # narrows the number of valid groups that can fill the middle row from 
