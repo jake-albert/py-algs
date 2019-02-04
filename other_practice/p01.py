@@ -10,8 +10,8 @@
 ##############################################################################
 
 # One question is how to handle an empty input. The most reasonable output is 
-# 0, given that the longest sequence of any integers that couuld be formed 
-# from elements in an empty list is 0.
+# 0, given that the longest sequence of any integers that could be formed from
+# elements in an empty list is 0.
 
 # The below solution requires O(N) space as it stores one "key: value" pair in
 # a dictionary for each item in the input. It takes O(N) time, performing 
@@ -39,7 +39,7 @@
 # are in the dictionary to determine which of cases 2, 3 and 4 holds.
 
 # We then update the span by adding x to the dictionary and setting the 
-# approriate low and high values to maintain the "low-high property".
+# appropriate low and high values to maintain the "low-high property".
 
 def f1(lst,verbose=False):
     """Returns the length of the longest consecutive sequence of
