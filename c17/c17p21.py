@@ -133,8 +133,7 @@ def f2(bar_heights):
     if len(bar_heights) < 3:  # Histogram cannot possibly hold water.
         return 0
     
-    right = rightmost_max(bar_heights)   
-    
+    right = rightmost_max(bar_heights)     
     return fill(bar_heights,right,True) + fill(bar_heights,right,False)  
     
 def rightmost_max(lst):
