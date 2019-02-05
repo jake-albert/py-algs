@@ -4,4 +4,5 @@
 13: Re-Space  
 17: Multi Search   
 20: Continuous Median   
+21: Volume of Histogram  
 24: Max Submatrix    
