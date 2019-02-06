@@ -15,9 +15,9 @@ from data_structs import Trie
 
 # An important question is whether we can count "duplicates" of words in the 
 # list. If the list is ["dog", "cat", "dogcat", "catdogdog"], then is the 
-# longest word "dogcat", the longest word that uses each word at most once, 
-# or "catdogdog" that is the result of concatenating repetitions of the same 
-# word? I assume the LATTER option for this problem.
+# longest word "dogcat" (the longest word that uses each word at most once), 
+# or "catdogdog" (the result of concatenating repetitions of the same word)? I
+# assume the LATTER for this problem.
 
 # Also important is to determine how to handle the empty string if it appears 
 # in the list. Is the empty string made of other words in the list? I assume 
@@ -25,32 +25,33 @@ from data_structs import Trie
 # None. Because of this, I choose to ignore empty strings in the input.
 
 # Finally, when there is more than one correct solution, do we return all, or 
-# is one acceptable? I assume I can arbitrarily return one such word.
+# is one acceptable? I assume I need only return one longest valid word.
 
 # As with many string/matching problems, a trie seems like a natural data 
 # structure to start to think about using. Say we load all words from the list
 # into a trie in O(N*L) time, where N is the number of words and L is the 
 # length of the longest string in the list.
 
-# I began to think about this problem with an approach that forbids word 
-# duplicates. Say we have all words made of the first w words in the list. If 
+# I began to think about an approach that builds all possible words from the
+# input words left to right to see if they match anything (for now, ignoring 
+# duplicates). Say we have all words made of the first w words in the list. If 
 # the list is ["aa","bb","cc","aacc","aabbcc","aab","aabaabaa"], and w is 2,
 # then these words would be ["aa","aabb","bb","bbaa"], and two of these, "aa"
 # and "aabb", are prefixes to some word in the input list (as verified in the
 # trie.) When looking at the third word, "cc", we then consider three cases to 
 # update the list of prefixes: A) concatenating "cc" to the ends of each 
-# prefix ("aacc" and "aabbcc", which are both words in the list), and B)  
+# prefix ("aacc" and "aabbcc", which are both words in the list), B)  
 # concatenating each of the w-1 words to the end of "cc" ("ccaa" and "ccbb", 
 # neither of which can be prefixes), and C) the word itself as a prefix (which
 # here cannot be a prefix to other words). 
 
-# At first, the number of prefixes to track seems to grow exponentially, and 
-# it does if we do not attempt to weed out prefixes as they are built. At 
-# some stage where there are X prefixes, we keep them, then from case A) add
-# another X prefixes that end with the new word, then from case B) add X that
-# begin with the new word, and then finally add the new word, so at the next 
-# stage the number of prefixes has increased to 3X+1. We can define the total
-# number of prefixes at an index i recursively as:
+# The number of prefixes to track grows exponentially, if we do not attempt to
+# weed out prefixes as they are built. If at some stage where there are X 
+# prefixes, then we keep all of them in the next round and THEN: from case A) 
+# add another X prefixes that end with the new word; from case B) add X
+# prefixes that begin with the new word, and from C) add the new word. The new 
+# number of prefixes thus increases to 3X+1. We can define the total number of
+# prefixes at an index i recursively as:
 
 # P[0] = 1
 # P[i] = 3*P[i-1]+1
@@ -63,7 +64,7 @@ from data_structs import Trie
 # then at most O(L*N) prefixes will ever be allowed in the list, so runtime 
 # to traverse the whole list would be in O(L*N^2)), it seems like a lot of 
 # work to attempt to "build up" possible words. My better approach below 
-# instead checks existing words to determine if they are made of other words. 
+# instead checks existing words to determine if they are made of others. 
 
 # Say that we want to determine whether or not the word "aabaabaa" is made 
 # up of other words in ["aa","bb","cc","aacc","aabbcc","aab","aabaabaa"]. If 
@@ -72,28 +73,28 @@ from data_structs import Trie
 
 # We can say that "aabaabaa" is made up of other words, then, if (but not
 # necessarily ONLY if) "baabaa" is also made up of other words in the list, so
-# we can recursively check that  subword. In doing so we find that "b" is not
+# we can recursively check that subword. In doing so we find that "b" is not
 # another word, and then that "ba" does not exist at all in the trie, so we
 # can rule out "baabaa" as being made of other words and try again from the 
 # top level. This brings us to the third prefix, "aab", which also is a word,
 # so we recursively check "aabaa" and eventually find that it, and thus the 
-# full word at the top level is made of other words.
+# full word at the top level, is made of other words.
 
-# By memoizing past results and using a Trie for early termination, we can  
+# By memoizing past results and using a trie for early termination, we can  
 # verify a word in O(L^2) time, so the entire function takes O(N*L^2) time. 
 # Assuming that we are working with English words, L should be quite small, 
 # and if we can assume that L is constant over our inputs, then we can argue 
-# that the approach runs in linear time with a very low constant factor. Space
-# requirements are in O(L*N).
+# that the approach runs in linear time to the number of words in the input,
+# with a very low constant factor. Space requirements are in O(L*N).
  
 # I sort words by their length in decreasing order so that we can return
-# immediately the first word that is made up of other words. Assuming that the 
-# input words have some maximum possible length L, I implemented a simple 
-# bucket sort that organizes words by their length (with words of equal length 
-# ordered arbitrarily) and generates lists of indices to the original list. 
-# The sort dynamically grows the list of buckets and runs in O(L+N) time, so 
-# is not a bottleneck to the above approach (unlike if we used an O(NlogN) 
-# comparison sort).
+# immediately the first word is found to be made up of other words. Assuming 
+# that the input words have some maximum possible length L, I implemented a 
+# simple bucket sort that organizes words by their length (with words of equal
+# length ordered arbitrarily) and generates lists of indices to the original
+# list. The sort dynamically grows the list of buckets and runs in O(L+N) 
+# time, so is not a bottleneck to the above approach (unlike if we used an 
+# O(NlogN) comparison sort).
 
 def long_to_short(lst):
     """Given a list of words, generates indices to words in decreasing
@@ -200,9 +201,9 @@ def subword_made_of_others(word,start_i,fail_set,root):
 # failed values for start_i when calling subword_made_of_others(). When an 
 # extra line is added that prints information about every time the function is 
 # called, we can comment out the line that adds values to fail_set and see the
-# number of calls increase sharply. With the line, there is no more than one 
-# call per character, each call in O(L) time; thus O(L^2) time per word. 
-                    
+# number of calls increase sharply. The set enforces no more than one call per
+# character, and with each call in O(L) time, checking one word is in O(L^2).
+
 def test():
     """Tests on some sample inputs."""
     inputs = (["cat","banana","dog","nana","walk","walker","dogwalker"],
