@@ -204,6 +204,16 @@ def subword_made_of_others(word,start_i,fail_set,root):
 # number of calls increase sharply. The set enforces no more than one call per
 # character, and with each call in O(L) time, checking one word is in O(L^2).
 
+# There is still a little bit of duplicated work in some inputs. Since calls 
+# to word_made_of_others() on different words in the list do not share 
+# information with each other, a call that failed on "abcde" but did verify 
+# that "abc" is made up of other words currently throws that information away.
+
+# Would it be worth it to also maintain some global hash set that stores 
+# shorter words verified before their turn? It would speed up the call on the
+# final two inputs but would could slow performance slightly for other inputs 
+# where the correct output is not verified early in another word.  
+
 def test():
     """Tests on some sample inputs."""
     inputs = (["cat","banana","dog","nana","walk","walker","dogwalker"],
