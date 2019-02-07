@@ -7,4 +7,5 @@
 17: Multi Search   
 20: Continuous Median   
 21: Volume of Histogram  
+23: Max Black Square  
 24: Max Submatrix    
