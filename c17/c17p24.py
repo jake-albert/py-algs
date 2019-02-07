@@ -122,7 +122,7 @@ def f1(M):
     
     Args:
         M: A list of list(s) of ints. The function enforces that M is
-          a square matrix, with equal numbers of rows columns.
+          a square matrix, with equal numbers of rows and columns.
     
     Returns:
         An Output instance.
