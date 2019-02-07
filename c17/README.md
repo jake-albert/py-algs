@@ -1,5 +1,6 @@
 ## CCI6: Chapter 17 Problems
 
+02: Shuffle  
 07: Baby Names  
 13: Re-Space  
 15: Longest Word  
