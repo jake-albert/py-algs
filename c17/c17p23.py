@@ -393,7 +393,7 @@ def f2(M):
     return output
     
 def all_black(M,r,c,D):
-    """Returns whether or not subsquare with uppler-left corner at 
+    """Returns whether or not subsquare with upper-left corner at 
     (r,c) and dimension D consists entirely of black pixels."""    
     for i in range(r,r+D):
         for j in range(c,c+D):

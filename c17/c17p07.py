@@ -27,7 +27,7 @@ from data_structs import Graph
 # Say that N is the length of the list of names and M is the length of the
 # list of synonyms.
 
-# The first question to ask is whether the list needs to output in any
+# The first question to ask is whether the list needs to be output in any
 # particular order, such as a sorted order by frequency. The input does not 
 # appear to be sorted either by frequency or alphabetically, so I am going to
 # assume that the output list can be in any order. 
