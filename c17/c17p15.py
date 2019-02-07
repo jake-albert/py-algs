@@ -2,7 +2,7 @@ import sys
 sys.path.append('..')
 from data_structs import Trie
 
-# c17p21
+# c17p15
 
 # Longest Word: Given a list of words, write a program to find the longest 
 # word made of other words in the list.

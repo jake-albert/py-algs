@@ -1,3 +1,5 @@
+from random import randint
+
 # c17p23
 
 # Max Black Square: Imagine you have a square matrix, where each cell (pixel)
@@ -47,7 +49,7 @@
 
 # Another approach is to consider solving subproblems. We know that every NxN
 # square is made of 4 overlapping (N-1)X(N-1) subsquares, and that the largest
-# all-black subsquare is either A) the FULL NxN square if all constituenet 
+# all-black subsquare is either A) the FULL NxN square if all constituent 
 # subsquares' max black subsquares are themselves, or B) the largest max black
 # subsquare among the four constituent squares otherwise:
 
@@ -61,7 +63,7 @@
 #           ████        │███ │   │ ███│   │    │   │    │         
 #           ███     ==\ │███ │ , │ ██ │ , │███ │ , │ ███│
 #           ████    ==/ │███ │ , │ ███│ , │███ │ , │ ███│
-#           █ ██        │____│   │____│   │█ █_│   │_ ██│ 
+#           █ ██        │____│   │____│   │█_█_│   │__██│ 
 
 # We can then write a solution on matrix M and length N, with a recursive 
 # function that is called on subsquares defined by a UL corner and dim:
@@ -80,7 +82,7 @@
 #             return ((row,col),D)
 #         else
 #             return whichever of the four has D of greatest value
-             
+    
 # To avoid repeating recursive calls, we could keep a 3-dimensional memo that
 # stores the results of best() for EVERY subsquare. The above algorithm would 
 # then need O(N^3) space and can return in O(N^3) time, since it performs 
@@ -101,9 +103,9 @@
 
 BLACK = 1
 
-def get_memo(M,n):
-    """Returns a memo such that stores two values for every position 
-    (r,c) in a square matrix M of dimension n:
+def get_memo(M,N):
+    """Returns a memo that stores two values for every position (r,c) 
+    in a square matrix M of dimension n:
    
         A) The number of black pixels in the longest uninterrupted 
         sequence starting at (r,c) and extending to the right; and
@@ -111,7 +113,7 @@ def get_memo(M,n):
         
     Args:
         M: A list of lists of ints 0 or 1.
-        n: The dimension of the matrix. 
+        N: The dimension of the matrix. 
         
     Returns:
         A list of lists of ints with values from 0 to n inclusive.
@@ -120,23 +122,87 @@ def get_memo(M,n):
     # Python for loops are relatively slow, so it would be wise to 
     # re-write using NumPy in any situation where speed really matters.
     
-    memo = [[[0,0] for _ in range(n)] for _ in range(n)]
+    memo = [[[0,0] for _ in range(N)] for _ in range(N)]
     
-    for r in range(n-1,-1,-1):
-        for c in range(n-1,-1,-1):
+    for r in range(N-1,-1,-1):
+        for c in range(N-1,-1,-1):
             if M[r][c] == BLACK:            
-                memo[r][c][0] = memo[r][c+1][0] + 1 if c < n-1 else 1
-                memo[r][c][1] = memo[r+1][c][1] + 1 if r < n-1 else 1
+                memo[r][c][0] = memo[r][c+1][0] + 1 if c < N-1 else 1
+                memo[r][c][1] = memo[r+1][c][1] + 1 if r < N-1 else 1
                 
     return memo
 
+# Once this preprocessing is done, we can traverse pixels in the matrix by its
+# 2N+1 diagonals from bottom-right to upper-left, making O(1) computations at 
+# each pixel to find the largest black subsquare with upper-left corner at 
+# that pixel.
+
+# The basic idea is that when moving within an all-black square from its 
+# bottom-right corner to its top-left corner, the minimum of the length of the
+# longest sequence of all-black pixels extending from that pixel to the right
+# and from that pixel down always increases:
+
+#                                           4
+#           ████                     3     4████
+#           ████              2     3███    █
+#           ████       1     2██     █      █
+#           ████      1█      █      █      █  
+
+# This minimum might increase by 1 at each step, as above, by more than 1:
+
+#                                           5
+#           █████                    4     5████
+#           ████              2     3███    █
+#           █████      1     3███    █      █
+#          █████      1█      █      █      █  
+#           ██                       █      █
+
+# But either way indicates that the largest all-black square with upper-left 
+# corner has a dimension ONE larger than that of the largest all-black square 
+# with upper-left corner at the previous pixel down and to the right.
+
+# On the other hand, if this minimum ever decreases, the dimension of the 
+# largest all-black square with a corner at that pixel decreases to that 
+# minimum:
+
+#                                           4
+#           ██ █                     3     2██
+#           ████              2     3███    █
+#           ████       1     2██     █      █
+#           ████      1█      █      █      █  
+ 
+# Whereas the recursive solution I wrote above returns only one max black 
+# subsquare, my below approach returns all such squares when there are more 
+# than one.
+ 
 class Output:
-
+    """Represents an output of all max black subsquares.
+    
+    Attributes:
+        dim: An int. The dimension of the subsquares.
+        array: A list of tuples representing the upper-left corners.
+    """ 
+    
     def __init__(self):
-        self.array = []
-        self.start = 0
-        self.best = 0
+        """Inits an output representing no black subsquares."""
+        self.dim = 0
+        self.array = [] 
+    
+    def __eq__(self,other):    
+        """Returns True iff two outputs represent same subsquares.""" 
+        return self.dim == other.dim and                \
+               sorted(self.array) == sorted(other.array)
 
+    def __str__(self):
+        """Returns string for pretty-printing output."""
+        if self.dim == 0:
+            return "No black subsquares."
+            
+        builder = [f"Max dimension is {self.dim} with UL corners at:"]
+        for point in self.array:
+            builder.append(str(point))
+        return "\n".join(builder)
+               
 def f1(M):
     """Returns the largest fully black submatrix of square matrix M.
     
@@ -160,91 +226,119 @@ def f1(M):
     elif [len(M[i]) for i in range(len(M))] != [len(M)]*len(M):
         raise ValueError("M is not a square matrix.")
     
-    n = len(M)
-    memo = get_memo(M,n)
+    N = len(M)
+    memo = get_memo(M,N)
     output = Output()
     
-    for d in range(n):    
+    # We explore diagonals from the "center" spine, where the largest 
+    # possible black subsquare can be, outward. 
+    
+    for x in range(N):    
         
-        # update the output to hold the best full matrices we have found so far
-        diags_start = [(n-1,n-1)] if d == 0 else [(n-1,n-1-d),(n-1-d,n-1)]
+        # Get the coordinates of the bottom-right corners of all 
+        # diagonals with an "offset" of x from the center. For example, 
+        # when x is 3 for some 4x4 matrix, the "diagonals" are single 
+        # pixels at the upper-right and bottom-left corner. 
+
+        diags_start = [(N-1,N-1)] if x == 0 else [(N-1,N-1-x),(N-1-x,N-1)]
         for diag_start in diags_start:
-            check_diag(memo,n,diag_start,output)
+            check_diag(memo,diag_start,output)
         
-        # we can exit early if we have checked a diagonal with the best possible 
-        # max square that it can hold, such as a 4X4 from (0,1) in a 5X5 matrix        
-        if output.best == n-d:
+        # If after updating the max subsquares seen in the diagonals,
+        # we see that they have a dimension that later diagonals cannot 
+        # possibly beat, exit early. For example, a 4X4 black subsquare 
+        # found with upper-left corner at (0,1) in a 5X5 matrix cannot 
+        # possibly be beat by subsquares with upper-left corners in 
+        # more outward diagonals.
+        
+        if output.dim == N-x:
             return output
         
-            
-    # otherwise, we simply return the best that we have found so far
     return output   
-
-
     
-def check_diag(memo,n,diag_start,output):
-
+def check_diag(memo,diag_start,output):
+    """Finds the largest black subsquare with upper-left corner in a 
+    given diagonal, and update global max subsquare if it is larger.
+    
+    Args:
+        memo: A list of lists of ints.
+        diag_start: A tuple of ints representing the bottom-right 
+          corner of the diagonal.
+        output: An Output instance.
+    """        
     i,j = diag_start
-    current = 0
+    cur_dim = 0
     
-    # keep moving up and to the left until hit a wall
     while i >= 0 and j >= 0:
         
-        # we are part of a full subsquare of dim n as long as these values continue
-        # to be greater than or equal to n for every point on the diagonal
-        to_right, to_down = memo[i][j]       
-        
-        if to_right > current and to_down > current:
-            current += 1
+        to_right, to_down = memo[i][j]      
+        if to_right > cur_dim and to_down > cur_dim:
+            cur_dim += 1
         else:
-            current = 1 if to_right > 0 and to_down > 0 else 0
-                 
-        if current > 0:
+            cur_dim = min(to_right,to_down)
         
-            # replace best if found first subsquare of bigger size
-            if current > output.best:            
-                output.best = current
-                #output = [((i,j),best)]
-                output.array.append((i,j))
-                output.start = len(output.array)-1
-                
-            # otherwise, just append it to the list of best subsquares    
-            elif current == output.best:
-                output.array.append((i,j))
+        # If a subsquare is larger than the previous subsquares stored,
+        # we replace them. (Notice that the name "output.array" is 
+        # simply reassigned to a new object here. I had originally 
+        # continued appending to the same array and kept another value,
+        # "start", that marked where the new max subsquares began in 
+        # that array, but got rid of that for simplicity's sake. Now, 
+        # the Python garbage collector works to deallocate all of the 
+        # tuple objects in array when we reassign the name. Altogether,
+        # though, no more than O(N) work is done per call to the whole 
+        # check_diag() function, as no more than O(N) values can be in 
+        # the array at any one time.)
         
+        if cur_dim > output.dim:            
+            output.dim = cur_dim
+            output.array = [(i,j)]
+            
+        # Ignore any black squares of dim 0 (white pixels).
+        
+        elif cur_dim > 0 and cur_dim == output.dim:
+            output.array.append((i,j))
+    
         i-=1
         j-=1
   
-# pretty printing for the output    
-def print_output(output):
-    print(f"Best subsquare dimension is {output.best}")
-    for point in output.array[output.start:]:
-        print(point)  
-
 def test():
-                
-    
-    test_matrices = [[[1,0,1,1,1,1],
+    """Tests some sample inputs."""
+    test_matrices = [[[1,1,0],
+                      [1,1,1],
+                      [1,1,1]],
+                    
+                    # ^ ans: (0,0),(1,0),(1,1) with dim 2
+                    
+                     [[0,0,0],
+                      [0,0,0],
+                      [0,0,0]],
+                      
+                    # ^ ans: no black subsquares
+                    
+                     [[1,0,1,1,1,1],
                       [0,1,1,0,1,1],
                       [1,1,1,1,0,1],
                       [1,1,1,0,0,1],
                       [1,1,1,0,1,1],
                       [0,1,1,1,1,1]],     
-                    # ans: (2,0) with dim 3              
+                    
+                    # ^ ans: (2,0) with dim 3              
            
                      [[1,0,0,1,1],
                       [1,0,1,1,1],
                       [1,1,1,1,1],
                       [1,1,1,1,1],
                       [1,1,1,1,1]],       
-                    # ans: (2,0),(2,1),(2,2),(1,2) with dim 3   
+                    
+                    # ^ ans: (2,0),(2,1),(2,2),(1,2) with dim 3   
                      
                      [[1,0,0,0,0],
                       [0,1,1,1,0],
                       [1,1,1,1,0],
                       [1,1,1,1,0],
                       [1,1,0,0,1]],    
-                    # ans: (1,1) with dim 3
+                    
+                    # ^ ans: (1,1) with dim 3
                     
                      [[0,1,1,1,1,1,1,0],
                       [1,0,1,0,1,1,0,1],
@@ -254,11 +348,76 @@ def test():
                       [1,1,0,1,1,0,1,1],
                       [1,0,1,1,1,0,0,1],
                       [0,1,1,1,1,1,1,0]],
-                    # ans: (0,4),(2,0),(2,6),(3,0),(3,6),(4,0),(4,6),
+                    
+                    # ^ ans: (0,4),(2,0),(2,6),(3,0),(3,6),(4,0),(4,6),
                     #      (5,3),(6,3),(6,2) with dim 2
     
                      [[1 for _ in range(1000)] for _ in range(1000)]]   
-                    # ans: (0,0) with dim 1000
+                    
+                    # ^ ans: (0,0) with dim 1000
                     
     for M in test_matrices:    
-        print_output(f1(M))
+        print(f1(M))
+
+# To test more rigorously for correctness, I wrote up a slightly optimized 
+# version of the brute-force O(N^6) solution.
+        
+def f2(M):
+    """Brute-force version of f1 above."""
+    
+    # We simply reject incorrectly sized input.
+    
+    if len(M) == 0:
+        raise ValueError("M is empty.")
+    elif [len(M[i]) for i in range(len(M))] != [len(M)]*len(M):
+        raise ValueError("M is not a square matrix.")
+    
+    output = Output()
+    early_term = False
+    
+    # Test from larger dimensions to smaller in order to exit early.
+    
+    for D in range(len(M),0,-1):
+        
+        if early_term: break
+        
+        for r in range(len(M)-D+1):
+            for c in range(len(M)-D+1):
+        
+                if all_black(M,r,c,D):
+                    if output.dim == 0:
+                        output.dim = D
+                        early_term = True
+                    output.array.append((r,c))
+    
+    return output
+    
+def all_black(M,r,c,D):
+    """Returns whether or not subsquare with uppler-left corner at 
+    (r,c) and dimension D consists entirely of black pixels."""    
+    for i in range(r,r+D):
+        for j in range(c,c+D):
+            if M[i][j] != BLACK:
+                return False
+    return True
+     
+def rand_test(trials,dim):
+    """Tests f1 against brute-force f2 on randomly generated input.
+    
+    Args:
+        trials: Number of inputs to create and test.
+        dim: Dimension of test matrices.
+        
+    Raises:
+        AssertionError: f1 and f2 disagree.
+    """
+    for trial in range(trials):
+        M = [[randint(0,1) for _ in range(dim)] for _ in range(dim)]
+        o_01, o_02  = f1(M), f2(M) 
+        
+        try:
+            assert o_01 == o_02 
+        except:
+            print(M)
+            print(o_01)
+            print(o_02)
