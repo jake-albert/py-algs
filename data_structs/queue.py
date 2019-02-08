@@ -8,10 +8,10 @@ class LinkedListQueue:
         queue: A Doubly instance that simulates the queue.
     """
     
-    def __init__(self, loads=None):
-        """Inits an empty Queue by default. If loads is not None and 
-        non-empty, loads items into queue such that the first item in 
-        loads is the first that will be removed."""
+    def __init__(self,loads=None):
+        """Inits an empty LinkedListQueueQueue by default. If loads is
+        not None and non-empty, loads items into queue such that the 
+        first item in loads is the first that will be removed."""
         if loads is not None:
             self.queue = Doubly(loads)
         else:
@@ -46,10 +46,15 @@ class DequeQueue:
     Attributes:
         queue: A deque object."""
     
-    def __init__(self):
-        """Inits an empty DequeQueue."""
+    def __init__(self,loads=None):
+        """Inits an empty DequeQueue. If loads is not None and 
+        non-empty, loads items into queue such that the first item in 
+        loads is the first that will be removed."""
         self.queue = deque()
-     
+        if loads is not None:
+            for load in loads:
+                self.add(load)
+                
     def __len__(self):
         return len(self.queue)
      
