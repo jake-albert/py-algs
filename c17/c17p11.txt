@@ -1,0 +1,8 @@
+This is the test document 
+For purposes of getting all of the words correct 
+I am separating words from their punctuation marks
+I am in fact not using punctuation marks at all
+This line ends with a word
+This line ends with whitespace   
+My favorite food in the whole world is bananas
+What are the purposes of the whitespace parts of this document
