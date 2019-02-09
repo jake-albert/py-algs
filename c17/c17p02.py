@@ -11,9 +11,9 @@ from statistics import mean, stdev
 
 ##############################################################################
 
-# I assume that the perfect random number generator inputs random integers in 
+# I assume that the perfect random number generator outputs random integers in 
 # any specified range. I use Python's randint() function to simulate the RNG, 
-# and abstract a deck of cards as a list of length 52. (In fact, my solution
+# and abstract a deck of cards as a list of length 52. (In fact, this solution
 # works to shuffle Python lists of any length.)
 
 # First, we must pick with equal probability some card out of the 52 to occupy
