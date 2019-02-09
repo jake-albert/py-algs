@@ -5,6 +5,7 @@
 05: Letters and Numbers  
 06: Count of 2s  
 07: Baby Names  
+09: Kth Multiple  
 13: Re-Space  
 15: Longest Word  
 16: The Masseuse  
