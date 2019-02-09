@@ -124,6 +124,10 @@ def plot_f_of_k():
 # Because we always take the lowest possible value or values, we never "skip"
 # valid numbers and correctly find every valid number.
 
+# Runtime in total is O(K). O(1) memory is required for each "stream", as I 
+# store only one value from each stream at a time, but altogether O(K) space 
+# is used to keep the running list of valid numbers.
+
 # My below solution is generalized to handle any number of prime factors. In 
 # fact, even when factors are not necessarily prime, the class outputs
 # meaningful information; namely, the Kth integer that can be expressed as 
