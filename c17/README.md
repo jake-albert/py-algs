@@ -1,6 +1,9 @@
 ## CCI6: Chapter 17 Problems
 
 02: Shuffle  
+04: Missing Number  
+05: Letters and Numbers  
+06: Count of 2s  
 07: Baby Names  
 13: Re-Space  
 15: Longest Word  
