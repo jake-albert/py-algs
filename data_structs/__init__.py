@@ -10,6 +10,9 @@ from .heap import MaxHeap
 from .heap import MyMinHeap
 from .heap import MyMaxHeap
 
+from .dictheap import MinDictHeap
+from .dictheap import MaxDictHeap
+
 from .graph import Graph
 
 from .trie import Trie

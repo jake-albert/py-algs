@@ -47,9 +47,9 @@ class MyHeap:
     """ The superclass for MyMinHeap and MyMaxHeap. 
     
     Attributes:
-        array: A list. array[0] represents the top of the heap, and 
-          for any item at index i, its two children (if they exist) 
-          are at indices 2*i+1 (left) and 2*i+2 (right). 
+        array: A list. array[0] represents the top of the heap, and for
+          any item at index i, its two children (if they exist) are at 
+          indices 2*i+1 (left) and 2*i+2 (right). 
         cmp: A comparator function. By the heap property, holds True 
           for every parent with respect to both of its children. <= 
           for a MinHeap, and >= for a MaxHeap.
@@ -81,15 +81,7 @@ class MyHeap:
         # with parent values as far as is appropriate.
     
         self.array.append(value)
-        index = len(self.array) - 1
-        
-        while self._has_parent(index):
-            parent_index = self._get_parent(index)
-            if not self._heap_property_holds(parent_index,index):
-                self._swap(index,parent_index)
-                index = parent_index
-            else:
-                break
+        self._send_up_end_val()
     
     def pop(self):
         """Removes and returns the top value from the heap while 
@@ -169,12 +161,27 @@ class MyHeap:
             return left_index 
         else:
             return right_index
-           
-    def _send_down_top_val(self):
-        """Successively swaps the value at the top of the heap to lower
+    
+    def _send_up_val(self,index):
+        """Successively swaps the value at some index in heap to higher
         levels until the heap property is satisfied. Assumes that the
-        heap satisfies the heap property except for its top value."""   
-        index = 0    
+        heap satisfies the heap property except for at index."""
+        while self._has_parent(index):
+            parent_index = self._get_parent(index)
+            if not self._heap_property_holds(parent_index,index):
+                self._swap(index,parent_index)
+                index = parent_index
+            else:
+                break
+                
+    def _send_up_end_val(self):
+        """Sends up final value in array as far as is required."""
+        self._send_up_val(len(self.array)-1)
+    
+    def _send_down_val(self,index):
+        """Successively swaps the value at some index in heap to lower
+        levels until the heap property is satisfied. Assumes that the
+        heap satisfies the heap property except for at index."""       
         while self._has_left_child(index):
 
             # Pick the "strongest" of available children to check that 
@@ -190,6 +197,10 @@ class MyHeap:
                 index = contender_index
             else:
                 break
+        
+    def _send_down_top_val(self):
+        """Sends down top value as far as is required."""
+        self._send_down_val(0)
         
 class MyMinHeap(MyHeap):
     """A minheap from scratch. See base class for details."""
