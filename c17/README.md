@@ -10,7 +10,8 @@
 13: Re-Space  
 15: Longest Word  
 16: The Masseuse  
-17: Multi Search   
+17: Multi Search  
+18: Shortest Supersequence  
 20: Continuous Median   
 21: Volume of Histogram  
 23: Max Black Square  
