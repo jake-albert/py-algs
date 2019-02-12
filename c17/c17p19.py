@@ -139,7 +139,7 @@ def f3(lst):
     S = (n)*(n+1)//2 - reduce(add,lst)
     P = factorial(n) // reduce(mul,lst)
     
-    disc = sqrt(S*S-4*P)  # Discriminant of the quadratic solution.
+    disc = sqrt(S*S-4*P)  # Discriminant of the quadratic equation.
     return int((S-disc)/2), int((S+disc)/2)
     
 # It is possible to avoid using such big numbers above by summing the base-2
@@ -166,7 +166,7 @@ def f4(lst):
     S = (n)*(n+1)//2 - reduce(add,lst)
     P = round(2 ** (reduce(add,logs(range(1,n+1))) - reduce(add,logs(lst))))
     
-    disc = sqrt(S*S-4*P)  # Discriminant of the quadratic solution.
+    disc = sqrt(S*S-4*P)  # Discriminant of the quadratic equation.
     return int((S-disc)/2), int((S+disc)/2)
   
 def logs(it):
@@ -337,24 +337,26 @@ def f6(lst,timetest=False):
         else:
             lo,hi = (lo,spl) if ahs == ehs else (spl+1,hi)
     
-    return passes if timetest else (els-als, ehs-ahs)
+    return passes if timetest else (lo, hi)
    
 def expected_sums(lo,spl,hi):
     """Returns the expected lower sum and expected higher sum.
     
-    Given positive integers lo, spl, and hi, return the sum of all 
+    Given positive integers lo, spl, and hi, returns the sum of all 
     integers from lo to spl inclusive, and from spl+1 to hi inclusive. 
     For example, if lo is 4, spl is 6, and hi is 9, returns 4+5+6 = 15 
     and 7+8+9 = 24. Applies simple algebra in O(1) time.
     """
     spl_item = (spl)*(spl+1)  # Saved to avoid redundant calculations.
-    return (sp_item-(lo)*(lo-1))//2, ((hi)*(hi+1)-sp_item)//2
+    return (spl_item-(lo)*(lo-1))//2, ((hi)*(hi+1)-spl_item)//2
 
-# given a list, and three positive integers, return the sum of all elements in the list 
-# from lo to spl inclusive, and from spl+1 to hi inclusive. Runs in O(n) time, requiring 
-# one complete pass of the list. Assumes all elements are integers
 def actual_sums(lst,lo,spl,hi):
-
+    """Returns the actual lower sum and actual higher sum.
+    
+    Given a list and positive integers lo, spl, and hi, returns the sum
+    of all elements in the list from lo to spl inclusive, and from 
+    spl+1 to hi inclusive. Runs in O(n) time.
+    """
     lo_sum, hi_sum = 0,0
     for num in lst:
         if lo <= num and num <= spl: 
@@ -364,82 +366,101 @@ def actual_sums(lst,lo,spl,hi):
     
     return lo_sum, hi_sum
 
+# The below "speed test" checks how many scans of the list are required and 
+# verifies that the behavior predicted above is occurring. 
 
-  
-# one other approach that was suggested by the book involves not using the sum and product,
-# but using the sum and the sum of squares. This can also be solved for a unique pair of 
-# values with a quadratic equation.
-def f7(lst):
+# For example, with n=50, we see:
 
-    # n is equal to two more than are in the list
-    n = len(lst) + 2
+# 1225 total trials.              = 50*49/2 unique input pairs
+#    min: 1                       ~ Half of inputs require only one pass.
+#    max: 5                       Worst case: floor(log(50)) passes.
+#    avg: 1.876734693877551
 
-    # there is actually a (by a constant factor) faster way to do these 
-    # calculations, like in f3, but here we do not do that again. 
-    S1 = (n)*(n+1)//2 - reduce(add,lst)
-    S2 = reduce(add,squares(range(1,n+1))) - reduce(add,squares(lst))
-    
-    print(S1,S2)
-    
-    disc = sqrt(2*S2-S1*S1)
-    return int((S1-disc)/2), int((S1+disc)/2)
-  
-# a little generator we use to ensure that we keep O(1) storage  
-def squares(it):
+# And with n=1000:
 
-    for item in it:
-        yield item**2
-  
-# tests on all possible pairs of integers that could be missing, which is in O(n^2),
-# and since the actual trials are each O(n) time, the tester is in O(n^3)
-def accuracy_test(n, trials):
-
-    messups = 0
-
-    for lo in range(1,n+1):
-    
-        print(f"with {lo} as lo")
-    
-        for hi in range(lo+1,n+1):
-                
-        
-            for _ in range(trials):
-                bob = [x for x in range(1,n+1) if (x!=lo and x!=hi)]
-                shuffle(bob)
-                if (lo,hi) != f5(bob):
-                    print("ERROR",bob,lo,hi)
-
-    print(f"{messups} messups.")
-
-# speed test for determining how many passes of the list are required
-# ex. when run for n=1000
-
-"""
-499500 total trials...........or 1000*999/2 for all the pairs
-    min: 1                       about half of inputs require only one pass
-    max: 9                       the worst inputs require floor(log(1000)) passes
-    avg: 1.989149149149149       as was proven above, the AVERAGE # of passes app-->2
-"""
+# 499500 total trials.            = 1000*999/2 unique input pairs
+#    min: 1                       ~ Half of inputs require only one pass.
+#    max: 9                       Worst case: floor(log(1000)) passes.
+#    avg: 1.989149149149149       AVG # of passes approaches 2.
 
 def speed_test(n):
-
+    """Tests runtime of f6.
+    
+    Given an integer N, tests f6's performance over an input list for 
+    all unique pairs of missing integers X and Y such that X < Y < =N. 
+    Records the number of scans over the list that were required to 
+    determine the output, and aggregates and prints statistics of these.
+    """
     all_counts = []
-
+    
     for lo in range(1,n+1):
     
-        print(f"with {lo} as lo")
+        print(f"Testing missing pairs with {lo} as lo...")
     
         for hi in range(lo+1,n+1):
             bob = [x for x in range(1,n+1) if (x!=lo and x!=hi)]     
-            all_counts.append(f4(bob,True))
+            all_counts.append(f6(bob,True))
     
     all_counts.sort()
     
     min,max = all_counts[0],all_counts[-1]
     avg = sum(all_counts) / len(all_counts)
     
-    print(all_counts)
     print(f"{len(all_counts)} total trials")
     print(f"    min: {min}")
     print(f"    max: {max}")
     print(f"    avg: {avg}")
+
+  
+# Interestingly, the book suggested a different "equation-based" approach that
+# calculates the sum, and then sum of squares of inputs. This approach does 
+# not fail on larger inputs the way f4 did, does not calculate factorials  
+# which quickly overflow the way f3 did, so it is the superior equation-based
+# function. Like my informal proof above with X-A and Y+A, it can be shown by 
+# solving quadratic equations that only unique pairs of integers have both the
+# same sum and same sum of squares.
+
+def f7(lst):
+    """See f3 docstring."""
+    n = len(lst) + 2
+
+    S1 = (n)*(n+1)//2 - reduce(add,lst)
+    S2 = reduce(add,squares(range(1,n+1))) - reduce(add,squares(lst))
+        
+    disc = sqrt(2*S2-S1*S1)  # Discriminant of the quadratic equation.
+    return int((S1-disc)/2), int((S1+disc)/2)
+  
+def squares(it):
+    """Yields squares of iterator items 1-by-1 instead of O(N) list."""
+    for item in it:
+        yield item**2
+
+# We confirm accuracy of f5, f6, and f7 below. (On small inputs, f3 and f4 
+# could also be tested, but I am reserving the tests only for the "best" of 
+# each of the three types of approaches I worked with for this problem.)
+        
+def accuracy_test(n,trials):
+    """Tests correctness of the best equation-based approach, f7, the
+    probabilistic approach, f6, and the sort-based approach, f5.
+    
+    Given an integer N, tests correctness over an input list for 
+    all unique pairs of missing integers X and Y such that X < Y <= N.
+
+    For each pair, a new input list is created and shuffled trials
+    times, as f5 has different behavior based on the order of items in 
+    the input.
+    
+    Raises:
+        AssertionError: At least one among f5, f6 and f7 is incorrect.
+    """
+    for lo in range(1,n+1):
+    
+        print(f"Testing missing pairs with {lo} as lo...")
+    
+        for hi in range(lo+1,n+1):
+            for _ in range(trials):
+                lst = [x for x in range(1,n+1) if (x!=lo and x!=hi)]
+                shuffle(lst)
+                assert (lo,hi) == f7(lst)
+                assert (lo,hi) == f6(lst)
+                assert (lo,hi) == f5(lst)  # Modifies input so do last.
