@@ -150,14 +150,13 @@ def f3(lst):
 # Just because we avoid using large numbers does not automatically mean that 
 # we have negligible memory constraints, though. Using logs requires that we 
 # store floats, and these floats must have enough bits to store sufficiently 
-# precise numbers that we get correct results after rounding. Might revisit 
-# later to determine for different levels of precision what the largest N is
-# on which we can still expect correct results.
+# precise numbers that we get correct results after rounding. 
 
 # With the standard Python float, which is accurate to 53 bits or about 16 
 # decimal places, the below function fails on inputs where N is as low as 
 # 71,431 or so. More rigorous testing would be needed to find out on exactly
-# what kinds of inputs this is secure, but 
+# what kinds of inputs this is secure, or alternatively what level of 
+# float precision is required to have f4 be secure over a given N for inputs. 
     
 def f4(lst):
     """See f3 docstring."""
