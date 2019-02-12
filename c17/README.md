@@ -12,6 +12,7 @@
 16: The Masseuse  
 17: Multi Search  
 18: Shortest Supersequence  
+19: Missing Two  
 20: Continuous Median   
 21: Volume of Histogram  
 23: Max Black Square  
