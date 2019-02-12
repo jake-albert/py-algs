@@ -15,5 +15,6 @@
 19: Missing Two  
 20: Continuous Median   
 21: Volume of Histogram  
+22: Word Transformer  
 23: Max Black Square  
 24: Max Submatrix    
