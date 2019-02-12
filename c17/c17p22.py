@@ -17,6 +17,10 @@ from nltk.corpus import words
 
 ##############################################################################
 
+# NOTE: Importing this file as a module requires that NLTK be installed
+# (https://www.nltk.org/install.html). To install the Unix words corpus, 
+# use the nltk.download() command in interactive mode and select "words".
+
 # I assume for this problem that words consist only of the 26 letters in the 
 # English alphabet (not caps sensitive). I will call the first word in the 
 # input the "start word" and the second word the "goal word".
