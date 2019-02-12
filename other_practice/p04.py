@@ -17,15 +17,14 @@ from data_structs import Stack, DequeQueue, Graph
 # the Node class, but would need to reset this attribute after every search is 
 # performed.
 
-def dfs(graph):
+def dfs(graph,ROOT_INDEX=0):
     """Performs depth-first search from the node indexed at 0. At each 
     visited node, prints whatever value is stored there.
     
     Args:
         graph: A Graph instance.
+        ROOT_INDEX: The starting index. 0 by default.
     """
-    ROOT_INDEX = 0
-    
     if graph.is_empty():
         return
     
@@ -43,18 +42,19 @@ def dfs(graph):
     seen_nodes = set()
     dfs_from_node(graph[ROOT_INDEX])
 
-def bfs(graph):
+def bfs(graph,ROOT_INDEX=0):
     """Performs breadth-first search from the node indexed at 0. At 
-    each visited node, prints whatever value is stored there.
+    each visited node, appends whatever value is stored there. Returns 
+    a list of values at all visited nodes.
     
     Args:
         graph: A Graph instance.
+        ROOT_INDEX: The starting index. 0 by default.
     """
-    ROOT_INDEX = 0
-    
     if graph.is_empty():
         return
     
+    output = []
     seen_nodes = set() 
     
     # This approach uses a queue of node indices.
@@ -65,11 +65,13 @@ def bfs(graph):
     while not search_queue.is_empty():
         cur_node = graph[search_queue.remove()]
         if cur_node not in seen_nodes:
-            print(cur_node.data)
+            output.append(cur_node.data)
             seen_nodes.add(cur_node)
             for child_index in cur_node.children:
                 search_queue.add(child_index)
                 
+    return output 
+               
 # To test the Graph class, as well as to demonstrate how DFS and BFS visit 
 # nodes in a different order, I defined the graph from page 107 of CCI6. Below
 # is my (very) crude Unicode drawing of the graph.

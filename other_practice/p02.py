@@ -107,7 +107,7 @@ def time_test():
     end = time()
     return end-start
     
-# Calculating the total number of unique, valid grids is almost infeasibly
+# Calculating the total number of unique, valid grids is almost unfeasibly
 # messy by hand, but we can at least make a start at it.
 
 # Finding the number of unique, valid top rows is simple. There are a total of
