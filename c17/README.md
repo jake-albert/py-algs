@@ -18,4 +18,5 @@
 21: Volume of Histogram  
 22: Word Transformer  
 23: Max Black Square  
-24: Max Submatrix    
+24: Max Submatrix  
+26: Sparse Similarity  
