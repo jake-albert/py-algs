@@ -7,6 +7,7 @@
 07: Baby Names  
 09: Kth Multiple  
 11: Word Distance  
+12: BiNode  
 13: Re-Space  
 15: Longest Word  
 16: The Masseuse  
