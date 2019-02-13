@@ -98,11 +98,11 @@
 #     - Calculating the similarities for each pair of docs from their 
 #       intersections, which is in O(S) time. 
 
-# So total time requirements are O((W*N)+(W*F^2)+(S)). The first and third 
-# terms seem to be the best runtime we can conceivably imagine to read the
-# input and print the output. The middle term also improves on the original
-# approach whose complexity is O(W*N^2), since F must be smaller than N in 
-# order for the similarity of any two arbitrarily selected documents to be 0.  
+# So total time requirements are O((W*N)+(W*F^2)+(S)). The 1st and 3rd terms
+# seem to be the best runtime we can conceivably imagine to read the input and
+# print the output. The middle term also improves on the original approach 
+# whose complexity is O(W*N^2), since F must be smaller than N in order for 
+# any two arbitrarily selected documents to very likely have similarity of 0.  
 
 class Dictionaries:
     """Class maintains three dictionaries used to find the solution.
