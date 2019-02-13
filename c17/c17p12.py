@@ -1,6 +1,5 @@
 from random import shuffle
 
-
 # c17p12
 
 # BiNode: Consider a simple data structure called BiNode, which has pointers 
