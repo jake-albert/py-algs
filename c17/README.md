@@ -1,5 +1,6 @@
 ## CCI6: Chapter 17 Problems
 
+01: Add Without Plus  
 02: Shuffle  
 04: Missing Number  
 05: Letters and Numbers  
