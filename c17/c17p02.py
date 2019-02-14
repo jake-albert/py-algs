@@ -1,6 +1,6 @@
 from random import randint
 from math import factorial
-from statistics import mean, stdev
+from statistics import median, stdev
 
 # c17p02
 
@@ -33,46 +33,64 @@ def f1(lst):
     Args:
         lst: A list of objects.
     """
-    for i in range(len(lst)-1):  # No need swap the final value.
+    for i in range(len(lst)-1):  # No need to swap the final value.
         selection = randint(i,len(lst)-1)
         lst[i], lst[selection] = lst[selection], lst[i]
 
-def test(n,trials):
-    """Tests the shuffle function and returns some rudimentary results.
+def test(N,trials):
+    """Tests the shuffle function and prints some rudimentary results.
 
     Args:
-        n: An int. The length of the list to shuffle.
+        N: An int. The length of the list to shuffle.
         trials: An int. The number of shuffles to perform.
     """
-    occs = {}
+    occurrences = {}
 
     for t in range(trials):
     
         if trials > 10 and t % (trials//10) == 0:
             print(f"Trial:{t:10} ({100*t/trials:2.0f}%)")
             
-        lst = list(range(n))
+        lst = list(range(N))
         f1(lst)
         
         key = tuple(lst)  # Hashable version of the shuffle.
-        if key not in occs:
-            occs[key] = 1
-        occs[key] += 1
+        if key not in occurrences:
+            occurrences[key] = 1
+        occurrences[key] += 1
     
     print("\nRESULTS:\n")
-    fact = factorial(n)
+    fact = factorial(N)
     print(f"Expected distinct shuffles: {fact}")
-    print(f"Actual distinct shuffles  : {len(occs.items())}\n")   
+    print(f"Actual distinct shuffles  : {len(occurrences.items())}\n")   
     
-    print(f"Expected hits per shuffle           : ~{trials//fact}")
-    print(f"Expected probability of each shuffle: {100/fact}")
+    print(f"Expected hits per shuffle          : ~{trials//fact:8}")
+    lo_q, med, hi_q = get_qs(occurrences.values())     
+    print(f"Lower quartile of shuffle hits     :  {lo_q:8}")
+    print(f"Median                             :  {med:8}")
+    print(f"Upper quartile                     :  {hi_q:8}\n")
     
-    if n <= 5:  # Do not print all shuffles when n! is large.
+    print(f"Expected probability of each shuffle: {100/fact:.4f}%")
+    sigma = stdev([100*occ/trials for occ in occurrences.values()])
+    print(f"StdDev of probabilities             : {sigma:.4f}%")
+        
+    if N <= 5:  # Do not print all shuffles when N! is too large.
         print("")
         print("Shuffle: Hits (Percentage)") 
-        for k,v in sorted(occs.items()):
-            print(f"{k}: {v} ({100*v/trials:.4f}%)")
+        for k,v in sorted(occurrences.items()):
+            print(f"{k}: {v:6} ({100*v/trials:7.4f}%)")
+    
+# I use the rudimentary function below rather than use a more sophisticated 
+# library like numpy or pandas to get quartile information.
         
-    print("")
-    sigma = stdev([100*occ/trials for occ in occs.values()])
-    print(f"StdDev of probabilities: {sigma:.4f}%")
+def get_qs(lst):
+    """Returns (rough) Q1, Q2, and Q3 values of a list."""
+
+    sorted_lst = sorted(lst)
+    mid = len(sorted_lst) // 2
+    
+    lo_q = int(median(sorted_lst[:mid]))
+    med = int(median(lst))
+    hi_q = int(median(sorted_lst[mid:]))
+    
+    return lo_q, med, hi_q
