@@ -137,6 +137,7 @@ def f1(a,b):
         
     Raises:
         ValueError: At least one of a and b is out of range.
+        OverflowError: Sum resulted in either over or underflow.
     """
     a, b = MySignedInt(a), MySignedInt(b)
     output = MySignedInt(0)
@@ -160,7 +161,7 @@ def f1(a,b):
     if a._sign_bit_is_zero() and b._sign_bit_is_zero():
     
         if overflow:
-            raise Exception("OVERFLOW ERROR -- Too Positive")
+            raise OverflowError("OVERFLOW ERROR -- Too Positive")
         else:
             return output.get_value()
     
@@ -173,7 +174,7 @@ def f1(a,b):
             output._sign_bit_to_one()
             return output.get_value()
         else:
-            raise Exception("UNDERFLOW ERROR -- Too Negative")
+            raise OverflowError("UNDERFLOW ERROR -- Too Negative")
         
     # When a and b are of different signs, then the output is certainly 
     # within bounds, and the overflow bit determines the sign.
@@ -186,15 +187,35 @@ def f1(a,b):
             output._sign_bit_to_one()
             return output.get_value()
 
-# The book's recursive solution was quite elegant, and it works on both 
-# positive and negative integers as well. It uses XOR to find the "sum" 
-# portion of the result, and AND (shifted to the left) to determine the carry
-# portion, and then computes the sum of these. 
+# As expected, the lowest positive and highest negative sums that induce 
+# overflow and underflow errors are the upper and lower bounds of integers 
+# that can be expressed as 32-bit signed integers.
+            
+def error_tests():
+    """Tests that the upper and lower bounds are correct."""
+    inputs = [(   2**31-1, 0),  # Highest possible sum.
+              (   2**31-1, 1),  # One over.
+              (-1*2**31  , 0),  # Lowest possible sum.
+              (-1*2**31  ,-1)]  # One under.
+    
+    for a,b in inputs:
+        try:
+            print(f"{a} + {b} = {f1(a,b)}")
+        except OverflowError as e:
+            print(f"{a} + {b} = {e}")
+            
+# The book's recursive solution was elegant and works on both positive and
+# negative integers as well. It uses XOR to find the "sum"  portion of the 
+# result, and AND (shifted to the left) to determine the carry portion, and 
+# then computes the sum of these. 
 
 # In order to make the operations work on Python ints, I again needed to 
 # convert inputs to MySignedInt instances, as well as write little XOR, AND, 
 # and shift operations on MySignedInt instances. As a result, the calculations
 # are quite slow but as a proof of concept it works fine.
+
+# (I do not handle overflow and underflow errors for this function. f2 simply
+# returns an incorrect sum.)
             
 def my_xor(a,b):
     """Returns a MySignedInt with value equal to a ^ b."""
@@ -216,13 +237,13 @@ def shifted_left(a):
             
 def f2(a,b):
     """See f1 docstring."""
-    return recurse(MySignedInt(a),MySignedInt(b))
+    def recurse(a,b):
+        if b.get_value() == 0: return a.get_value()
+        sum = my_xor(a,b)
+        carry = shifted_left(my_and(a,b))   
+        return recurse(sum,carry)
     
-def recurse(a,b):
-    if b.get_value() == 0: return a.get_value()
-    sum = my_xor(a,b)
-    carry = shifted_left(my_and(a,b))   
-    return recurse(sum,carry)
+    return recurse(MySignedInt(a),MySignedInt(b))
     
 def test(n):
     """Tests addition of all pairs of unique integers -n to n."""
