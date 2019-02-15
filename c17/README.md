@@ -7,6 +7,7 @@
 05: Letters and Numbers  
 06: Count of 2s  
 07: Baby Names  
+08: Circus Tower  
 09: Kth Multiple  
 11: Word Distance  
 12: BiNode  
