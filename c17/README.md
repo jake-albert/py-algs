@@ -9,6 +9,7 @@
 07: Baby Names  
 08: Circus Tower  
 09: Kth Multiple  
+10: Majority Element  
 11: Word Distance  
 12: BiNode  
 13: Re-Space  
