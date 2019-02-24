@@ -212,11 +212,11 @@ def toy_test():
 # I "stress test" the WordTransformer class on the Unix "Word" corpus, 
 # accessed through Python's NLTK library. The corpus has 236,736 words, and 
 # loading them all into the WordTransformer with proper connections takes 
-# between 8 and 9 seconds on my machine.
+# between 8 and 9 seconds on my machine. 
     
 def test():
     """Creates a WordTransformer with the full corpus of spell-check 
-    words uses on Unix operating systems loaded. Tests a number of 
+    words used on Unix operating systems loaded. Tests a number of 
     sample inputs, then returns the WordTransformer.
     
     Usage:

@@ -1,6 +1,8 @@
 import sys
 sys.path.append('..')
 from data_structs import Trie
+from nltk.corpus import words
+from time import time 
 
 # c17p15
 
@@ -13,8 +15,12 @@ from data_structs import Trie
 
 ##############################################################################
 
-# An important question is whether we can count "duplicates" of words in the 
-# list. If the list is ["dog", "cat", "dogcat", "catdogdog"], then is the 
+# I assume the input is any alphabetical characters, but that we are NOT caps
+# sensitive. Meaning that if the list contains ["A", "b", "ba"], then "ba" is 
+# the correct output.
+
+# An important question is whether we can repeat words in creating bigger 
+# words. If the list is ["dog", "cat", "dogcat", "catdogdog"], then is the 
 # longest word "dogcat" (the longest word that uses each word at most once), 
 # or "catdogdog" (the result of concatenating repetitions of the same word)? I
 # assume the LATTER for this problem.
@@ -128,8 +134,9 @@ def f1(lst):
     """
     if len(lst) < 2:
         return None
-        
+    
     trie = trie_from_list(lst)
+    
     for word_index in long_to_short(lst):
         if word_made_of_others(lst[word_index],trie):
             return lst[word_index]
@@ -140,7 +147,7 @@ def trie_from_list(lst):
     trie = Trie()
     for word in lst:
         if len(word) > 0:
-            trie.insert(word)
+            trie.insert(word.lower())
     return trie
  
 def word_made_of_others(word,trie):
@@ -229,3 +236,17 @@ def test():
               
     for input in inputs:
         print(f1(input))
+ 
+# I "stress test" f1 on the Unix "Word" corpus, accessed through Python's NLTK
+# library. The corpus has 236,736 words, and loading them into a trie takes 
+# between 4.5 and 5.5 seconds on my machine. Finding the longest word made of 
+# other words, "formaldehydesulphoxylate", takes ~0.2 seconds.
+ 
+def test_big():
+    """Tests f1 on the full corpus of spell-check words used on Unix 
+    operating systems, printing the longest word found and runtime."""
+    start_time = time()
+    ans = (f1(words.words()))
+    end_time = time()
+    
+    print(f"Longest words is {ans}, found in {end_time-start_time}")
