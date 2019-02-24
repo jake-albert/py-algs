@@ -37,7 +37,8 @@ class RectBuilder:
     
     def count_row_options(self):
         return self.row_trie.size
-    
+   
+    # ASSUME WORD LENGTH IS CORRECT FOR ALL THREE BELOW
     def can_add_row(self,row_word):
         for i in range(len(row_word)):
             if row_word[i] not in self.tracers[i].children:

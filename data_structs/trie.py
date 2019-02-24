@@ -23,14 +23,16 @@ class TrieNode:
           characters to TrieNode instances.
         depth: An integer. A Trie's root has depth 0. Corresponds to 
           the index of a character in a string stored in the Trie.
+        parent: A TrieNode instance, or None if root of trie.
         EOW: A Boolean. True iff the path from the Trie's root to 
           the current TrieNode represents a valid word.
     """
 
-    def __init__(self,depth):
+    def __init__(self,depth,parent=None):
         """Inits TrieNode with no children at given depth."""
         self.children = {}
         self.depth = depth
+        self.parent = parent
         self.EOW = False
         
     def is_end_of_word(self):
@@ -72,7 +74,7 @@ class Trie:
                 node.mark_as_end_of_word()
         else:
             if word[i] not in node.children:
-                node.children[word[i]] = TrieNode(node.depth+1)
+                node.children[word[i]] = TrieNode(node.depth+1,node)
             self._insert_chars(node.children[word[i]],word,i+1)
 
     def in_trie(self,word):
