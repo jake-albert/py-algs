@@ -42,14 +42,14 @@ from random import shuffle, randint
 #  --------------------------------------------------- 
 #  7  5  9  0  2  1  3  5  7  9  1  1  5  8  8  9  7
 
-# We know that a for each "next" index x to the right of index x-1, the 
-# shortest supersequence ending at x will be shorter than the one ending at 
-# x-1 in just ONE case. Say we know that the shortest supersequence ending at 
-# index 5 is [5,9,0,2,1]. The shortest ending at 6 is simply that same 
-# subarray with longer[6], or 3, appended at the end, but this is longer than 
-# before and not worth tracking. 3 is not in shorter, so what is the use? 
-# In fact, even if this value were a 1 or a 9, the shortest supersequence 
-# ending at index 6 only gets longer, because we still need the 5 at index 1.
+# We know that for each "next" index x to the right of index x-1, the shortest
+# supersequence ending at x will be shorter than the one ending at x-1 in just
+# ONE case. Say we know that the shortest supersequence ending at index 5 is 
+# [5,9,0,2,1]. The shortest ending at 6 is simply that same subarray with 
+# longer[6], or 3, appended at the end, but this is longer than before and not
+# worth tracking. 3 is not in shorter, so what is the use? In fact, even if 
+# this value were a 1 or a 9, the shortest supersequence ending at index 6 
+# only gets longer, because we still need the 5 at index 1.
 
 # In contrast, the shortest supersequence ending at index 10 DOES improve on 
 # the shortest ending at 9, [1,3,5,7,9]. longer[10] is 1, which is the 
