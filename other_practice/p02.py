@@ -51,7 +51,7 @@ def f1(prin=False,set_check=False):
     number before halting.
     
     Args:
-        print: If True, function prints each unique grid that it forms.
+        prin: If True, function prints each unique grid that it forms.
         set_check: If True, function hashes each arrangement and reports 
           total number of unique arrangements before halting. Useful to 
           check that no duplicates were counted.
