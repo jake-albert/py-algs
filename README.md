@@ -11,6 +11,8 @@ Directory map:
   * The "other_practice" directory holds miscellaneous algorithms problems not from CCI6. They are ordered arbitrarily.
   * Any directory of the form "c{x}" holds my discussion of and solutions to problems from the x-th chapter of CCI6. Filenames in these directories are of the form "c{x}p{y}.py", where y is the number of the problem in that chapter.
 
+Some of my favorite problems to figure out were: c16p23 ("Rand7 from Rand5"), c17p08 ("Circus Tower"), and other_practice/p02 ("Funky Sudoku").
+
 Usage:  
   * Clone: `git clone https://github.com/jake-albert/py-algs.git`
   * Test: In a directory containing problems, begin interactive mode in Python 3 and import the file as a module. Solution and testing functions may be accessed as attributes of the module:  
