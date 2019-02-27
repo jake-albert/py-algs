@@ -22,16 +22,16 @@ from random import randint
 # are N people, we and we can arrange them in any order, and we are looking 
 # for a tower that has any number of people from 1 to 1-N, then there are a 
 # total of N!+(N-1)!+(N-2)!+...+1 towers that can be built, which is in 
-# O(N*N!). We could this space by trying every ordering, testing it for 
+# O(N*N!). We could search this space by trying every ordering, testing it for 
 # validity, and keeping track of the largest number of people we see in a
 # valid tower so far. This becomes unfeasibly slow with even small N. 
 
 # A good idea to start is to sort the list of people in increasing order by 
 # one of their dimensions, either weight or height, selected arbitrarily. All
 # valid towers must have people in the same order as the people in the sorted 
-# list, so this narrows the search space significantly. In fact, now the fully
-# space of towers to check can be searched by searching the set of all 
-# sequences of increasing indices in the array. 
+# list, so this narrows the search space significantly. In fact, now the full
+# space of possible towers to check can be searched by searching the set of 
+# all sequences of increasing indices in the array. 
 
 # This is equivalent to the set of all subsets of the list of indices. Why?
 # Say there are 10 items in the sorted list, with indices:
@@ -39,10 +39,10 @@ from random import randint
 #                      0  1  2  3  4  5  6  7  8  9
 
 # Any tower that we can build here corresponds to exactly one subset of those
-# indices, there is only ONE ordering of those indices that could create a 
+# indices, as there is only ONE ordering of those indices that could create a 
 # valid tower. For example, a tower that starts with the person at 2 and also
-# has the people at 6, 4, and 9 is the tower (2,4,6,9). All other 4!-1
-# permutations of those indices also correspond to the same tower/subset.
+# has the people at 6, 4, and 9 is the tower (2,4,6,9). All other 4!-1 = 23
+# permutations of those indices are invalid towers.
 
 # So, in O(NlogN) time we are able to reduce brute force search space from 
 # O(N*N!) to O(2^N), which is still quite large but better than before. What 
@@ -122,7 +122,7 @@ def f1(PPL):
     # We sort people by their FIRST dimension.
     
     SORT_D = 0
-    PPL.sort(key=itemgetter(0))
+    PPL.sort(key=itemgetter(SORT_D))
     OPT = [1]
     
     for i in range(1,len(PPL)):
