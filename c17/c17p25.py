@@ -16,27 +16,49 @@ from time import time
 
 ##############################################################################
 
+# currently work in progress.
+
 # NOT caps sensitive
+
+test_words = ["aa","ab","bq","pq"]
 
 max_L = 24
 
 # when we do it on words.words(), the number of words smushed onto each other 
 # for caps to lowercase changes it from 236736 to 234377
 
+class References:
+
+    def __init__(self,words,tries):
+        self.words = words
+        self.tries = tries
+
 class RectBuilder:
 
-    def __init__(self,row_len,col_len,tries):
+    def __init__(self,row_len,col_len,refs):
         self.row_len = row_len
         self.col_len = col_len
-        self.row_trie = tries[row_len]
-        self.col_trie = tries[col_len]
+        self.refs = refs
+        self.row_trie = refs.tries[row_len]
+        self.col_trie = refs.tries[col_len]
         self.tracers = [self.col_trie.root for _ in range(row_len)]
+        self.row_words = []
+        
+    def print_rect(self):
+        print("*"*self.row_len)
+        for row_word in self.row_words:
+            print(row_word)
+        print("*"*self.row_len)
         
     def count_col_options(self):
         return reduce(mul,[len(tracer.children) for tracer in self.tracers])
     
     def count_row_options(self):
         return self.row_trie.size
+   
+    def row_options(self):
+        for row_option in self.refs.words[self.row_len]:
+            yield row_option
    
     # ASSUME WORD LENGTH IS CORRECT FOR ALL THREE BELOW
     def can_add_row(self,row_word):
@@ -46,27 +68,89 @@ class RectBuilder:
         return True
     
     def add_row(self,row_word):
+        self.row_words.append(row_word)
         for i in range(len(row_word)):
             self.tracers[i] = self.tracers[i].children[row_word[i]]
                 
     def rem_row(self):
+        self.row_words.pop()
         for i in range(len(self.tracers)):
             self.tracers[i] = self.tracers[i].parent
     
-def get_tries(lst):
+def get_refs(lst):
 
     tries = [Trie() for _ in range(max_L+1)]
-    for word in lst:
+    words = [set() for _ in range(max_L+1)]
+    
+    for i, word in enumerate(lst):
         if len(word) > 0:
             tries[len(word)].insert(word.lower())
-    return tries
+            words[len(word)].add(word.lower())
+    
+    return References(words,tries)
 
 def get_orders(L):
 
     return sorted([(r,c) for c in range(1,L+1) for r in range(c,L+1)],
                   key = lambda p: p[0]*p[1],
                   reverse = True)
+ 
+def f1(lst):
+
+    print("getting refs")
+    refs = get_refs(lst)
+    print("refs gotten")
+    for row_len, col_len in get_orders(max_L):
+        print(f"Attempting to find a {row_len} X {col_len} rectangle.")
+        builder = RectBuilder(row_len,col_len,refs)
+        build_rect(builder)
     
+#    onomatopoetically
+#    nonuniformitarian
+    
+def build_rect(builder):
+    
+    if len(builder.row_words) == builder.col_len:
+        builder.print_rect()
+        return        
+    
+    #print(f"Depth: {len(builder.row_words)}")
+    #builder.print_rect()
+    #options, option_builder, tracer = [], [], builder.row_trie.root
+    #get_col_options(builder,options,option_builder,tracer)
+    #print(builder.count_row_options(), builder.count_col_options(), len(options))
+    
+    
+    if builder.count_row_options() <= builder.count_col_options():
+        options = [word for word in builder.refs.words[builder.row_len] if builder.can_add_row(word)]
+        #print(len(options))
+    else:
+        options, option_builder, tracer = [], [], builder.row_trie.root
+        get_col_options(builder,options,option_builder,tracer)
+    
+    
+    for row_option in options:  
+        builder.add_row(row_option)
+        build_rect(builder)
+        builder.rem_row()
+        
+            
+def get_col_options(builder,options,option_builder,tracer):
+
+    if len(option_builder) == len(builder.tracers):
+        options.append("".join(option_builder))
+        return
+    
+    for char in builder.tracers[len(option_builder)].children.keys():
+        if char in tracer.children:
+            option_builder.append(char)
+            tracer = tracer.children[char]
+            get_col_options(builder,options,option_builder,tracer)
+            option_builder.pop()
+            tracer = tracer.parent
+    
+    
+            
 # we assume that the criterion for "largest" is "has the largest area", or largest "r*c"
 
 # one important question to ask here is......can "duplicate" words exist in the rectangle?
