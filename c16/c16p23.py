@@ -18,7 +18,7 @@ def rand5():
 # Multiply the result of two calls to rand5(), creating 25 distinct outcomes.
 # This space of outcomes cannot be divided evenly into 7 equally likely parts,
 # but if the result is in the first 21, we can divide the space evenly.
-# Otherwise, we discards the value and try again until we reach a value in the
+# Otherwise, we discard the value and try again until we reach a value in the
 # first 21. 
 
 def f1():
