@@ -92,7 +92,7 @@ class MedianKeeper:
     def _is_empty(self):
         """Returns a Boolean."""
         
-        # Always inserts to lower first, so need to check higher.
+        # Always inserts to lower first, so no need to check higher.
         
         return len(self.lower) == 0 and self.mid is None
     
