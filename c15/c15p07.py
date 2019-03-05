@@ -53,7 +53,7 @@ def single(n):
         # For easier reading, I print not only the message "Fizz", 
         # "Buzz", etc. but also the number itself as a prefix.
  
-        print("".join([f"{x}: ",outstring]))
+        print(f"{x}: {outstring}")
 
 # In order to more easily write a multithreaded version of the solution, I 
 # created a wrapper class, "Number". I will create a single instance of this
